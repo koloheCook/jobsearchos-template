@@ -1,0 +1,20 @@
+[
+  {
+    "filename": "Growth Operations Lead (Café Labs).pdf",
+    "inferredSlug": "caf-labs_growth-operations-lead",
+    "sourceType": "pdf",
+    "pairedSource": null
+  },
+  {
+    "filename": "Platform Operations Lead (Fictional Systems).pdf",
+    "inferredSlug": "fictional-systems_platform-operations-lead",
+    "sourceType": "pdf",
+    "pairedSource": null
+  },
+  {
+    "filename": "web-captures/web-20260715T123456789Z-0123456789abcdef0123456789abcdef.jd.md",
+    "inferredSlug": "web-20260715t123456789z-0123456789abcdef0123456789abcdef-jd",
+    "sourceType": "public_url",
+    "pairedSource": "web-captures/web-20260715T123456789Z-0123456789abcdef0123456789abcdef.source.html"
+  }
+]

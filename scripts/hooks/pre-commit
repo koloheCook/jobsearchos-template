@@ -1,0 +1,30 @@
+#!/bin/sh
+# pre-commit: career content never enters git history (PRD principle 8).
+# Blocks any commit that stages a path under opportunities/, data/, or
+# landing/ other than landing/_ledger.md, landing/_runs.md, landing/README.md.
+# Wire up once per clone: git config core.hooksPath scripts/hooks
+
+violations=$(git diff --cached --name-only | while IFS= read -r path; do
+  case "$path" in
+    (opportunities/*|data/*)
+      printf '%s\n' "$path"
+      ;;
+    (landing/_ledger.md|landing/_runs.md|landing/README.md)
+      ;;
+    (landing/*)
+      printf '%s\n' "$path"
+      ;;
+  esac
+done)
+
+if [ -n "$violations" ]; then
+  {
+    echo "pre-commit: commit blocked. Career content never enters git history (PRD principle 8)."
+    echo "These staged paths are protected:"
+    printf '%s\n' "$violations" | sed 's/^/  - /'
+    echo "Unstage them with: git restore --staged <path>"
+  } >&2
+  exit 1
+fi
+
+exit 0

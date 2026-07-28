@@ -1,0 +1,16 @@
+{
+  "name": "jobsearchos-capture",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.cjs",
+  "description": "Local-only job description capture adapters",
+  "scripts": {
+    "test": "node --test",
+    "verify": "node --test"
+  },
+  "dependencies": {
+    "@mixmark-io/domino": "2.2.0",
+    "turndown": "7.2.4"
+  }
+}

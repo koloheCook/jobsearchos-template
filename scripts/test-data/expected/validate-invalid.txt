@@ -1,0 +1,4 @@
+validate-output: found 3 problem(s)
+- landing/_ledger.md line 5 has an invalid date or time: 2026-13-40 09:15
+- opportunities/fictional-systems_platform-operations-lead_2026-07-13/assessment.md has an invalid scores line directly below the verdict banner
+- data/tracker-mirror.json row 1 folderPointer does not resolve: missing-example_invented-role_2026-07-13

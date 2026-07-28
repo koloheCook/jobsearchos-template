@@ -1,0 +1,36 @@
+# Career content: never committed, even locally (PRD principle 8)
+opportunities/
+networking/
+landing/*
+!landing/_ledger.md
+!landing/_runs.md
+!landing/README.md
+!landing/web-captures/
+landing/web-captures/*
+!landing/web-captures/README.md
+data/
+capture/node_modules/
+
+# Generated surfaces: schema/stub committed, live payloads regenerated
+out/digest.md
+
+# Secrets: never committed; supply token values via the environment or a local
+# untracked file (gap named in the 2026-07-14 Codex secret-policy session)
+.env
+.env.*
+!.env.example
+
+# Session usage reports: embed prompt texts from all projects, local only
+session-report-*.html
+
+# OS noise
+.DS_Store
+
+# Claude Code worktrees
+.claude/worktrees/
+
+# Local guard telemetry, never commit run history.
+.claude/metrics/
+
+# Transient mutual-exclusion state for local jd-intake runs.
+.jobsearchos-runtime/

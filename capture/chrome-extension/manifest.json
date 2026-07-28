@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "jobSearchOS Local Capture",
+  "version": "0.1.0",
+  "description": "Selection-only local job-description capture for jobSearchOS.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_title": "Capture selected job description",
+    "default_popup": "popup.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; script-src 'self'; connect-src 'none'; img-src 'self' data:; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'"
+  }
+}

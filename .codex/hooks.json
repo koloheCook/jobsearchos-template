@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "PreToolUse": [{ "matcher": "Skill", "hooks": [{ "type": "command", "command": "bash \".codex/hooks/verdict-gate.sh\"" }] }],
+    "PostToolUse": [{ "matcher": "Write|Edit", "hooks": [
+      { "type": "command", "command": "bash \".codex/hooks/no-invented-metric.sh\"" },
+      { "type": "command", "command": "bash \".codex/hooks/scribe-check.sh\"" },
+      { "type": "command", "command": "bash \".codex/hooks/grammar-lint.sh\"" }
+    ] }]
+  }
+}

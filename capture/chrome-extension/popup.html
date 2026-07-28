@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jobSearchOS capture</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <button id="configure" type="button">Choose web-captures folder</button>
+    <label><input id="snapshot" type="checkbox" checked> Keep sanitized source snapshot</label>
+    <button id="capture" type="button" disabled>Capture selected job description</button>
+    <label>Escaped Markdown preview<textarea id="preview" readonly></textarea></label>
+    <output id="status" aria-live="polite"></output>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
