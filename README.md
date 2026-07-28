@@ -102,22 +102,61 @@ content, Notion tracker is read-only, no invented metrics, etc.).
    one past role at a time through your calibrated rubric and checks the verdict
    against your own gut; `prompts/backtest_synthesis.md` rolls the results up and
    proposes rubric edits. Do this before you let the rubric gate real decisions.
-8. **Put your own name and context into `PRD.md` and `CLAUDE.md`** where the
-   template left placeholders.
+8. **(Optional) personalize the docs.** The only *required* fill-ins are the
+   `<OWNER: ...>` markers in the rubric files (step 6). `PRD.md` and `CLAUDE.md` are
+   written generically and have no mandatory blanks -- skim them and add your own name or
+   context if you like, but nothing there gates the pipeline.
 9. **Decide on `tailor-handoff`.** It assumes a separate downstream project that
    turns a qualified opportunity into tailored application materials. If you don't
    have one, remove the skill (both `.claude/skills/tailor-handoff` and
    `.agents/skills/tailor-handoff`), or adapt it to whatever tool you use.
+10. **Author your positioning playbook.** `playbook/` ships as an empty container --
+    `index.md` (a routing table) and `core-messaging.md`, both blank scaffolds. The
+    `meeting-brief` skill loads playbook modules to build a call brief, so before your
+    first meeting add one module per talk-track theme at `playbook/modules/NN_<slug>.md`
+    and fill in the `index.md` routing table. Module content is yours to author and stays
+    manual; until you add modules, `meeting-brief` has no positioning to draw on.
 
 ## Connect Notion (optional)
 
-10. Create a Notion internal integration with **Read content only**, and share it
-    with *just* your job tracker database (least privilege -- not workspace-wide).
-11. Copy `.env.example` to `.env` (already gitignored) and fill in `NOTION_API_KEY`
+The pipeline *reads* (never writes) a Notion job tracker through a scoped mirror. To use
+it you first need **two databases** whose property names match what
+`scripts/refresh-tracker-mirror.mjs` expects -- it prints `missing properties` for any it
+cannot find. Match these names exactly, or edit the property map near the top of that
+script.
+
+**Companies database** (companion; resolves the tracker's company relation to a name):
+
+| Property | Type |
+|---|---|
+| `Company Name` | Title |
+
+**Master job tracker database:**
+
+| Property | Type | Notes |
+|---|---|---|
+| `Role` | Title | the role title |
+| `🏢 Company` | Relation -> your Companies database | ships with the 🏢 in the name; rename it in the script if you prefer plain text |
+| `Application Status` | Status | only rows set to `Not Applied`, `Applied`, `AI Screen`, `Phone Screen`, or `Interview` are mirrored |
+| `CC Status` | Status | your tailoring/cover-letter stage |
+| `Interest` | Select | |
+| `Date Applied` | Date | |
+| `Next Step` | Text | optional |
+| `Next Step Date` | Date | optional |
+| `jobSearchOS Folder` | Text | optional; the on-disk opportunity-folder pointer |
+| `Application` | URL or Text | optional |
+| `Last Edited` | Notion built-in "Last edited time" | automatic |
+
+Then wire the integration:
+
+11. Create a Notion internal integration with **Read content only**, and share it with
+    *just* your job tracker database **and its companion Companies database** (least
+    privilege -- not workspace-wide).
+12. Copy `.env.example` to `.env` (already gitignored) and fill in `NOTION_API_KEY`
     plus your tracker's database ID, data source ID, and company-source ID (see the
     comments in `.env.example` and `scripts/refresh-tracker-mirror.mjs` for where to
     find these in Notion).
-12. Run the `refresh-tracker-mirror` skill (or `node scripts/refresh-tracker-mirror.mjs`
+13. Run the `refresh-tracker-mirror` skill (or `node scripts/refresh-tracker-mirror.mjs`
     directly) to pull your tracker into `data/tracker-mirror.json`.
 
 ## Daily use
