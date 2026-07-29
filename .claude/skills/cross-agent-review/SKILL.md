@@ -57,11 +57,11 @@ routine findings is exactly the overhead this skill exists to cut down.
 ## Where dispositions land
 
 Every settled disposition goes on the artifact whoever executes it will actually
-open -- the workplan card, the spec section, the skill file -- not only in a chat
-message or a DEVLOG entry. See `codex-workplan.md`'s WP-5 card for the pattern:
-the Q4 run-receipt rule from this session's cross-review is written directly on
-the card, not just narrated in DEVLOG. DEVLOG still gets the narrative (what was
-decided and why) but the card is what a future session actually opens.
+open -- the task card, the spec section, the skill file -- not only in a chat
+message or a DEVLOG entry. The pattern: a rule agreed in a cross-review is written
+directly on the artifact that implements it, not just narrated in DEVLOG. DEVLOG
+still gets the narrative (what was decided and why) but the implementing artifact is
+what a future session actually opens.
 
 ## Handoff artifact
 

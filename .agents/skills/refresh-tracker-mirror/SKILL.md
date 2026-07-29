@@ -1,6 +1,6 @@
 ---
 name: refresh-tracker-mirror
-description: Refresh the read-only local Master Job Tracker mirror with the deterministic WP-2 script.
+description: Refresh the read-only local Master Job Tracker mirror with the deterministic refresh script.
 ---
 
 # Refresh Tracker Mirror
@@ -9,7 +9,7 @@ Use this skill only to refresh the local, read-only `data/tracker-mirror.json`
 mirror. It never writes to Notion or commits the mirror.
 
 1. Confirm that `scripts/refresh-tracker-mirror.mjs` exists. If it does not,
-   stop and report that WP-2 has not yet been integrated into this checkout.
+   stop and report that the refresh script is not present in this checkout.
 2. Require `NOTION_API_KEY` from the current process environment only. Do not ask
    for, print, write, or inspect a secret file. If it is unavailable, stop and
    report the owner prerequisite: run from the same trusted environment that

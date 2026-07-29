@@ -17,7 +17,7 @@ outside the headless create-only zone (PRD 4.4). Interactive sessions only.
 ### next (default)
 1. Read `prompts/_queue.md` pending rows.
 2. Re-verify each candidate against reality BEFORE recommending: current branch and
-   `git status`, `codex-workplan.md` card statuses, top DEVLOG entry. A pending
+   `git status`, your task list, top DEVLOG entry. A pending
    prompt contradicted by reality is flagged for supersede, never recommended.
 3. Report: the single best next prompt (file, target agent, why now), anything
    blocked and on what, anything that looks stale.
