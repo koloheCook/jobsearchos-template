@@ -5,12 +5,15 @@ description: Prepare a qualified local opportunity for the manual TAILOR-1 refer
 
 # tailor-handoff
 
-**Portability note:** this skill assumes a separate downstream tailoring project
-("CCv2.7" below) that turns a qualified opportunity into tailored application
-materials. That project is not part of this template. If you don't have an
-equivalent downstream tool, remove this skill (and its `.claude/skills` mirror),
-or read it as a reference implementation of the handoff pattern and adapt it to
-whatever tool you tailor materials in.
+**Portability note:** everywhere this skill says **"CCv2.7"** it means a separate
+downstream tailoring project that turns a qualified opportunity into tailored
+application materials. "CCv2.7" is just the reference implementation's name -- the
+companion `career-coach` template (titled CCv2.7) is one such project. The name is
+also the shared key of the handoff packet (the receiver parses the `CCv2.7 target
+folder` field), so if you keep this pairing, leave the name as-is. If you have no
+downstream tool, remove this skill (and its `.claude/skills` mirror); if you use a
+different one, adapt the skill and rename the packet field on BOTH sides so they stay
+in sync.
 
 Prepare the durable, manual boundary between jobSearchOS, which owns the opportunity, and
 CCv2.7, which owns the tailoring-only mirror. This is an owner-present skill. Never run it
