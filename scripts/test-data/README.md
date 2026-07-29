@@ -1,4 +1,4 @@
-# WP-1 test data
+# Test data
 
 These fixtures are invented. They contain no real third-party names, career data,
 or job description text.

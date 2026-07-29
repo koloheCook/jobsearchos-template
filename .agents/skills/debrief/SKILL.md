@@ -13,7 +13,7 @@ proceed on notes only.
 ## Steps
 1. Locate the meeting's `brief.md`; load its objectives. If no brief exists, say so
    (that is itself a process miss), collect objectives retroactively, and proceed.
-2. Collect the owner's raw notes/recollection (transcripts are Phase C; do not ask
+2. Collect the owner's raw notes/recollection (transcript ingestion is not built; do not ask
    for a recording). Interview the owner briefly if the notes are thin: what was
    said about next steps, any objection raised, anything that surprised them.
 3. Write `meetings/<date>_<slug>/debrief.md` per `templates/debrief.md`:

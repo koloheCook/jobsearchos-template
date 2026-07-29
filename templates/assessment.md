@@ -45,4 +45,4 @@ still open, pointers to the gaps below>
 
 ## Next 3 moves
 1. <specific, dated where possible; if verdict is PURSUE: "owner confirms verdict,
-   then CCv2.7 tailoring session" until Phase B>
+   then CCv2.7 tailoring session">

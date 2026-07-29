@@ -48,5 +48,6 @@ backtest establishes it, so it is not re-derived per assessment.
 1. Score against written anchors only; never inflate to fit a preferred story
    (imported: CCv2.7 scoring discipline).
 2. The written "read" must cite which anchor produced the score.
-3. You-fit-role (the JD-side axis) uses JD must-haves vs sourced evidence; until the
-   Phase B fork, a CCv2.7 session's rubric scoring may be referenced read-only.
+3. You-fit-role (the JD-side axis) uses JD must-haves vs sourced evidence; until a
+   dedicated in-repo JD-side rubric fork is built, a CCv2.7 session's rubric scoring
+   may be referenced read-only.

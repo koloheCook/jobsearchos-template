@@ -26,4 +26,4 @@
 
 | Version | Date | Change |
 |---|---|---|
-| v0.1 | 2026-07-15 | Created the empty Phase B container and module contract. |
+| v0.1 | 2026-07-15 | Created the empty playbook container and module contract. |

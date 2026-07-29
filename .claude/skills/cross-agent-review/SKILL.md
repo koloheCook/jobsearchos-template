@@ -5,7 +5,7 @@ description: Reconcile a design or correctness disagreement between Claude and C
 
 # cross-agent-review
 
-Formalizes the relay pattern that emerged organically across WP-1 (2026-07-14):
+Formalizes the relay pattern that emerged organically during development:
 Claude reviews Codex's PR, writes findings, the owner manually pastes them to
 Codex, Codex responds, the owner pastes the response back. That pattern works but
 is expensive in owner time and in dropped-context risk if run ad hoc. This skill

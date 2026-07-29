@@ -107,7 +107,7 @@ test("no-invented-metric separates an invented claim from an anchor citation on 
   assert.doesNotMatch(lastHit().detail, /\$100/);
 });
 
-// WP-3's mirror contract was hand-checked; this makes a one-sided edit fail the suite.
+// The mirror contract was hand-checked; this makes a one-sided edit fail the suite.
 test("shared guard hooks are byte-identical between .claude and .codex", () => {
   for (const name of MIRRORED_HOOKS) {
     const claude = readFileSync(path.join(__dirname, "..", ".claude", "hooks", name));

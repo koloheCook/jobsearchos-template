@@ -1,7 +1,7 @@
 # Changelog
 
 Framework-level history for jobSearchOS: skills, guard hooks, the deterministic
-script layer, the rubric model, the capture layer, and architecture phases.
+script layer, the rubric model, the capture layer, and how the architecture evolved.
 This is a curated summary, not a full development log -- the project's real
 working log (day-to-day session notes, real opportunity data, application
 history) stays private and local, same as the career content itself. See
@@ -110,7 +110,7 @@ Reverse-chronological; grouped by date.
   (verdict banner, ledger/run-log row formats, guard-hit log shape), and a
   provenance/component-status diagram.
 
-## 2026-07-06 -- Phase A: foundation
+## 2026-07-06 -- Foundation
 
 - Initial scaffold shipped: the PRD, the never-commit-career-content boundary,
   the three core skills (`jd-intake`, `meeting-brief`, `debrief`), their
@@ -125,7 +125,7 @@ Reverse-chronological; grouped by date.
   session, via a repeatable backtest-and-synthesis prompt pair; the synthesis
   pass confirmed a 9/9 verdict match against the owner's own judgment and
   closed the calibration round with no further edits.
-- Design-specced four Phase B items: a per-module playbook container, the
+- Design-specced four follow-on items: a per-module playbook container, the
   tracker-mirror architecture, a hardened scheduled-intake runtime, and the
   boundary for handing a qualified opportunity to a separate downstream
   tailoring tool.
