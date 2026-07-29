@@ -129,16 +129,8 @@ code:
   `node scripts/validate-output.mjs --root scripts/test-data/valid` (expect exit 0) to see the
   contracts checked against the shipped fixtures.
 
-## 6. Phases (build roadmap)
+## 5. What is built vs optional
 
-Phase A -- the triage + brief + debrief loop in section 4 -- is **built and in real use**. The
-rest is a roadmap a fork can ignore or build selectively (the original section 5 component
-audit was removed from this shareable overview).
-
-- **Phase B (specs):** `6.B1` playbook module system; `6.B2` tracker mirror
-  (`data/tracker-mirror.json`, with the required Notion properties in the README); `6.B3`
-  scheduled `jd-intake`; `6.B4` TAILOR-1 tailoring import-vs-reference; `6.B5` deterministic
-  scripts + the output validator; `6.B6` guard hooks; `6.B7` jd-match rubric fork; `6.B8` build
-  ownership and order; `6.B9` local-first URL capture (the Chrome extension + capture CLI).
-- **Phase C (deferred):** a scheduled daily digest and a transcript pipeline -- build only when
-  the pain appears.
+The capture -> triage -> brief -> debrief loop in section 4 is the built, load-bearing core.
+Anything beyond it (a scheduled daily digest, a transcript pipeline, a scheduled intake run) is
+optional and gated on real need -- add it only when the pain appears, not up front.

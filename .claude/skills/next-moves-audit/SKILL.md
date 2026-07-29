@@ -8,8 +8,7 @@ description: Report-only follow-through audit of the live pipeline. Surfaces ove
 The capture side of the system produces dated commitments (three next moves per
 debrief, verdict banners per assessment); nothing else checks whether those dates
 passed. This skill is that check. Owner-invoked, on demand only: a scheduled
-version would be a Phase C pull-forward (PRD section 6) and needs an explicit
-owner decision first.
+version would be a later enhancement and needs an explicit owner decision first.
 
 ## Inputs (all read-only)
 - `opportunities/*/debrief*.md` -- "Next 3 moves" section: numbered lines shaped
@@ -19,7 +18,7 @@ owner decision first.
 - `opportunities/*/meeting-brief*.md` -- evidence a call was scheduled/held.
 - `out/mc/jobsearch-manifest.json` -- pendingVerdicts cross-check.
 - `data/tracker-mirror.json` when present -- Next Step / Next Step Date fields
-  (may be null until the owner adds the properties, workplan WP-8).
+  (may be null until you add those properties to your tracker).
 
 ## Report (single table + short verdict, nothing else)
 1. **Overdue next moves:** every debrief move whose date is before today and has
