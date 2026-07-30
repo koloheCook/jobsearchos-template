@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "syncedAt": "2026-07-13T16:00:00.000Z",
+  "source": {
+    "databaseId": "invented-test-database",
+    "dataSourceUrl": "collection://invented-test-source",
+    "liveFilter": "invented active rows"
+  },
+  "rowCount": 2,
+  "rows": [
+    {
+      "notionUrl": "https://example.invalid/fictional-systems",
+      "role": "Platform Operations Lead",
+      "company": "Fictional Systems",
+      "applicationStatus": "Applied",
+      "ccStatus": null,
+      "interest": null,
+      "dateApplied": "2026-07-13",
+      "lastEdited": "2026-07-13T15:00:00.000Z",
+      "nextStep": "Review invented packet",
+      "nextStepDate": "2026-07-14",
+      "folderPointer": "Fictional Systems_Platform Operations Lead_2026-07-13"
+    },
+    {
+      "notionUrl": "https://example.invalid/cafe-labs",
+      "role": "Growth Operations Lead",
+      "company": "Café Labs",
+      "applicationStatus": "Phone Screen",
+      "ccStatus": null,
+      "interest": null,
+      "dateApplied": "2026-07-12",
+      "lastEdited": "2026-07-13T15:30:00.000Z",
+      "nextStep": null,
+      "nextStepDate": null,
+      "folderPointer": "caf-labs_growth-operations-lead_2026-07-12"
+    }
+  ],
+  "validation": {
+    "missingProperties": [],
+    "missingNextStepDate": ["https://example.invalid/cafe-labs"],
+    "pointerMissing": [],
+    "pointerBroken": []
+  }
+}
