@@ -13,8 +13,34 @@ This is a template, not a finished tool. It ships with the scaffolding
 calibrated to nobody in particular: you fill in your own rubric, deal-breakers,
 and identity details before it makes real decisions for you.
 
+## Quickstart (about 15 minutes)
+
+You need Node.js (any recent LTS), git, and Claude Code. Nothing else is required.
+
+```sh
+git clone https://github.com/koloheCook/jobsearchos-template.git jobsearchos
+cd jobsearchos
+git config core.hooksPath scripts/hooks          # blocks career content from being committed
+node --test scripts/                             # framework self-test, expect 0 failures
+cd capture && npm ci --ignore-scripts && cd ..   # capture dependencies (2 small packages)
+node board-watch/board-watch.mjs                 # first run: records a baseline, emits nothing
+node board-watch/board-watch.mjs                 # later runs: emits only NEW on-target postings
+```
+
+Then make it yours, in this order:
+
+1. **Point board-watch at your companies.** Edit `board-watch/boards.json`: one entry per company with its ATS (`greenhouse`, `ashby` or `lever`) and its board token, plus your `roleTerms` and `excludeTitle` words. See `board-watch/README.md` for how to find a token.
+2. **Calibrate the rubric** (step 6 below). Until you do, every verdict is capped at `EXPLORE`.
+3. **Open Claude Code in this folder** and type `/jd-intake` (every skill in this repo runs the same way: a slash and its name, or just ask for it in plain words) to triage whatever landed. You get one scored, gated assessment per role.
+4. **Run it daily** (see "Run it every morning" below).
+
+The full setup below covers the optional pieces: the Chrome capture extension, the Notion tracker mirror, the positioning playbook.
+
 ## The pipeline
 
+0. **Discover** (`board-watch/`) -- polls the public job-board APIs of the companies
+   you list (Greenhouse, Ashby, Lever), diffs against yesterday, and writes only the
+   new postings that match your role terms to `board-watch/out/new-urls.txt`.
 1. **Capture** -- drop a JD PDF in `landing/`, or grab one from the web with the
    included Chrome extension or CLI (`capture/`). Everything lands in a restricted
    inbox; nothing is transformed until intake runs.
@@ -31,8 +57,7 @@ and identity details before it makes real decisions for you.
 
 A deterministic script layer (`scripts/`) keeps the ledger, the manifest, and the
 optional Notion tracker mirror consistent without relying on an LLM to get
-formatting right every time; a small set of guard hooks (`.claude/hooks/`,
-mirrored for Codex in `.codex/hooks/`) catch invented metrics, missing evidence
+formatting right every time; a small set of guard hooks (`.claude/hooks/`) catch invented metrics, missing evidence
 markers, and malformed verdict banners as you write.
 
 ## The rubric and skills model
@@ -48,14 +73,14 @@ holds a symlink to each one for Claude Code):
 
 | Skill | When |
 |---|---|
-| `jd-intake` | New JD PDFs land in `landing/`; batch-processes everything new |
-| `meeting-brief` | A call is scheduled; you supply objectives |
+| `jd-intake` | New JD PDFs or captures land in `landing/`; batch-processes everything new |
+| `meeting-brief` | A call is scheduled; you supply 2-3 written objectives |
 | `debrief` | Same day as any completed call |
+| `next-moves-audit` | On demand: what's overdue across debriefs, verdicts, and next moves |
 | `refresh-tracker-mirror` | Refresh the optional Notion tracker mirror |
 | `tailor-handoff` | Optional -- hand a qualified opportunity to a separate tailoring project (see its portability note) |
-| `cross-agent-review` | A Claude/Codex finding on the same deliverable needs a bounded review |
-| `next-moves-audit` | On-demand: what's overdue across debriefs, verdicts, and next moves |
-| `prompt-queue` | Track what to run next, or log a new handoff prompt |
+
+**Builder tools (optional, safe to delete).** Two skills exist for maintaining this repo with two AI agents, not for running a job search: `cross-agent-review` (settles a disagreement between Claude and Codex in bounded rounds) and `prompt-queue` (tracks which saved prompt in `prompts/` to run next). Ignore them, or delete their folders under `.claude/skills/`.
 
 See `PRD.md` for the full architecture and design rationale, and `AGENTS.md` /
 `CLAUDE.md` for the operating rules both agents follow (never commit career
@@ -159,6 +184,34 @@ Then wire the integration:
 13. Run the `refresh-tracker-mirror` skill (or `node scripts/refresh-tracker-mirror.mjs`
     directly) to pull your tracker into `data/tracker-mirror.json`.
 
+## Run it every morning
+
+The daily loop is three commands: discover, capture, triage.
+
+```sh
+node board-watch/board-watch.mjs
+node capture/cli/capture-url.mjs --file board-watch/out/new-urls.txt
+```
+
+Then run `jd-intake` in Claude Code. Two ways to make that automatic:
+
+- **Claude Code desktop app (simplest):** create a scheduled task on this folder, daily at a time you like, with the prompt: "Run `node board-watch/board-watch.mjs`, then `node capture/cli/capture-url.mjs --file board-watch/out/new-urls.txt`, then run the jd-intake skill on everything new and summarize the verdicts." You read the summary with your coffee.
+- **Plain cron or launchd (discovery only):** schedule the two `node` commands above; they need no AI. Run `jd-intake` yourself when you sit down.
+
+Either way, board-watch never applies, never writes to a tracker, and never sets a verdict. It only finds new links.
+
+## Clip a job posting by hand
+
+For roles board-watch can't see (custom careers sites, LinkedIn, a link a friend sent), use the Chrome extension. Load it once (setup step 5), then:
+
+1. Open the job posting and highlight the job description text with your mouse.
+2. Click the jobSearchOS extension icon in the Chrome toolbar.
+3. First time only: click **Choose web-captures folder** and pick `landing/web-captures/` inside your clone. The extension checks the folder's `README.md` marker and refuses any other folder. It remembers the choice; Chrome may ask you to re-allow access later.
+4. Optional: tick **Keep sanitized source snapshot** to also save a cleaned copy of the page.
+5. Click **Capture selected job description**. The popup confirms `Saved <id>.jd.md` and shows a preview.
+
+Then run `jd-intake` in Claude Code as usual. The extension only reads what you highlighted and cannot send anything over the network.
+
 ## Daily use
 
 Drop a JD PDF into `landing/` (or capture a URL to `landing/web-captures/`), then
@@ -171,6 +224,26 @@ gitignored -- `opportunities/`, `data/`, `networking/`, and everything in
 `landing/` except the append-only ledger, run log, and READMEs never enter git.
 Keep it that way; the pre-commit guard (step 2 above) is there to help, not to
 replace judgment.
+
+## Before and after a call
+
+**Before (`/meeting-brief`).** Once a role has an assessment and a call is on the calendar, run `/meeting-brief`. It first asks for your 2-3 written objectives for this specific call (no objectives, no brief), plus who you are meeting, how many times you have met, and how long the call is. Paste in anything useful about the person or company. It reads the role's folder, including every earlier brief and debrief, and writes a one-page `opportunities/<role>/meetings/<date>_<slug>/brief.md`: posture, opening line, questions, the question they are most likely to ask you with a three-beat answer, your ask, and traps drawn from your own past debriefs. It works better once you have written playbook modules (setup step 10), but runs without them on stories you supply.
+
+**After (`/debrief`), the same day.** Paste your notes or just talk it through. It scores the call against the brief's objectives (hit / partial / not), lists what went well with evidence, names ONE coaching problem, and sets three dated next moves in `debrief.md` next to the brief. It will not write your follow-up email for you: you draft it, then ask it to polish. The next brief for the same role reads this debrief, so its coaching problem becomes the next call's trap to avoid.
+
+**Weekly (`/next-moves-audit`).** A read-only check across all your roles: debrief next moves whose date has passed, PURSUE verdicts you never confirmed, and calls that happened with no debrief. It ends with the one thing to do first. It writes nothing.
+
+## Test the rubric on past roles (backtest)
+
+Do this after calibrating the rubric (step 6) and before trusting its verdicts. Open Claude Code and say: "Follow `prompts/jobSearchOS_rubric_backtest.md` for this role:" followed by a link to, or the pasted text of, a job you applied to or seriously considered. It scores that one role, asks for your gut call, and appends a MATCH or MISMATCH row to `rubric/backtest-log.md`, naming the rubric axis at fault when it disagrees with you. Do 5-10 past roles, one per session, then run `prompts/backtest_synthesis.md` the same way to get proposed rubric edits.
+
+## What the guard hooks do
+
+Claude Code runs a few checks automatically whenever it writes an assessment or ledger row: no salary or metric that is not in the job description, every job description marked as a literal extraction, verdict banners in the right shape, and ledger rows that parse. They warn rather than block, except the verdict gate, which stops tailoring until you have confirmed a PURSUE verdict, and log each hit to `.claude/metrics/guard-hits.jsonl`, which stays local. If you see one fire, the fix is usually to cite the source or correct the format.
+
+## Files you can ignore
+
+`out/mc/jobsearch-manifest.json` is a machine-readable list of roles and pending verdicts that `jd-intake` keeps up to date and `next-moves-audit` reads; you never edit it. The scripts `write-preflight`, `intake-concurrency`, `ledger-diff`, `emit-manifest` and `requisition-key` are internal plumbing for those skills.
 
 ## Third-party notices
 

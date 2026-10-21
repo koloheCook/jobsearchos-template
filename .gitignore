@@ -1,5 +1,9 @@
 # Career content: never committed, even locally (PRD principle 8)
-opportunities/
+# Leading slash anchors these to the repo root. Without it, a trailing-slash-only
+# pattern matches at ANY depth and also swallows the fictional test fixtures under
+# scripts/test-data/. landing/* and capture/node_modules/ already carry a mid-path
+# separator, so they are root-anchored by gitignore's own rules.
+/opportunities/
 networking/
 landing/*
 !landing/_ledger.md
@@ -8,7 +12,7 @@ landing/*
 !landing/web-captures/
 landing/web-captures/*
 !landing/web-captures/README.md
-data/
+/data/
 capture/node_modules/
 
 # Generated surfaces: schema/stub committed, live payloads regenerated
@@ -34,3 +38,7 @@ session-report-*.html
 
 # Transient mutual-exclusion state for local jd-intake runs.
 .jobsearchos-runtime/
+
+# board-watch run state and output (local to each user)
+board-watch/state/
+board-watch/out/

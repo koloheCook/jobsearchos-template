@@ -44,7 +44,7 @@ async function verifyInbox(root) {
   return inbox;
 }
 
-export async function writeReceipt(root, stage, code, message, captureId = null, sourceUrl = null, artifactsCreated = []) {
+export async function writeReceipt(root, stage, code, message, captureId = null, sourceUrl = null, artifactsCreated = [], options = {}) {
   const inbox = await verifyInbox(root);
   const receipts = path.join(inbox, "_receipts");
   await ensureDirectory(receipts);
@@ -65,7 +65,7 @@ export async function writeReceipt(root, stage, code, message, captureId = null,
     code,
     captureId,
     sourceOrigin,
-    retryable: true,
+    retryable: options.retryable ?? true,
     message,
     artifactsCreated,
   };

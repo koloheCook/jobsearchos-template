@@ -9,6 +9,7 @@ import path from "node:path";
 import domino from "@mixmark-io/domino";
 import { sanitizeAndConvert, wrapSnapshot } from "../lib/html-sanitize.mjs";
 import { sanitizeUrl } from "../lib/capture-format.mjs";
+import { postingFromAtsPayload, resolveAtsApi } from "../lib/ats-api.mjs";
 import { writeCapture, writeReceipt } from "../lib/capture-writer.mjs";
 
 const MAX_URLS = 100;
@@ -55,7 +56,13 @@ async function pinnedLookup(hostname) {
   return addresses[0];
 }
 
-async function fetchPublic(initial) {
+const ACCEPT = {
+  html: { header: "text/html,application/xhtml+xml", type: "text/html", label: "HTML document" },
+  json: { header: "application/json", type: "application/json", label: "JSON document" },
+};
+
+async function fetchPublic(initial, kind = "html") {
+  const accept = ACCEPT[kind];
   let url = new URL(initial);
   for (let redirects = 0; redirects <= 5; redirects += 1) {
     if (url.protocol !== "https:" || url.username || url.password) throw new Error("batch URLs must be credential-free HTTPS URLs");
@@ -63,9 +70,13 @@ async function fetchPublic(initial) {
     const response = await new Promise((resolve, reject) => {
       const request = https.request(url, {
         method: "GET",
-        headers: { "User-Agent": "jobSearchOS-capture/0.1", Accept: "text/html,application/xhtml+xml", "Accept-Encoding": "identity" },
+        headers: { "User-Agent": "jobSearchOS-capture/0.1", Accept: accept.header, "Accept-Encoding": "identity" },
         servername: url.hostname,
-        lookup: (_hostname, _options, callback) => callback(null, pinned.address, pinned.family),
+        // Node >= 20 (autoSelectFamily) calls lookup with { all: true } and expects an array;
+        // answering with scalars there yields "Invalid IP address: undefined". Pinning is unchanged.
+        lookup: (_hostname, lookupOptions, callback) => (lookupOptions?.all
+          ? callback(null, [{ address: pinned.address, family: pinned.family }])
+          : callback(null, pinned.address, pinned.family)),
       }, resolve);
       request.setTimeout(TIMEOUT_MS, () => request.destroy(new Error("request timed out")));
       request.on("error", reject);
@@ -84,9 +95,9 @@ async function fetchPublic(initial) {
     }
     const type = String(response.headers["content-type"] ?? "").toLowerCase();
     const encoding = String(response.headers["content-encoding"] ?? "identity").toLowerCase();
-    if (!type.includes("text/html") || (encoding !== "identity" && encoding !== "")) {
+    if (!type.includes(accept.type) || (encoding !== "identity" && encoding !== "")) {
       response.resume();
-      throw new Error("response is not an uncompressed HTML document");
+      throw new Error(`response is not an uncompressed ${accept.label}`);
     }
     const chunks = [];
     let length = 0;
@@ -95,7 +106,7 @@ async function fetchPublic(initial) {
       if (length > MAX_BYTES) throw new Error("response exceeds 5 MiB limit");
       chunks.push(chunk);
     }
-    return { url: url.toString(), html: Buffer.concat(chunks).toString("utf8") };
+    return { url: url.toString(), body: Buffer.concat(chunks).toString("utf8") };
   }
   throw new Error("redirect limit exceeded");
 }
@@ -127,6 +138,31 @@ function extractJobPosting(html) {
   return usable[0];
 }
 
+// Page JSON-LD first (the original method). If the page carries no usable JobPosting and the
+// URL belongs to an ATS with a per-job JSON endpoint, take the body from that API instead and
+// record it as ats_api_content, with captured_from_url naming the API endpoint actually read.
+async function fetchPosting(input) {
+  let pageError;
+  try {
+    const fetched = await fetchPublic(input, "html");
+    const posting = extractJobPosting(fetched.body);
+    const sourceUrl = sanitizeUrl(fetched.url);
+    return { title: posting.title, html: posting.description, captureMethod: "jsonld_jobposting", sourceUrl, capturedFromUrl: sourceUrl };
+  } catch (error) {
+    pageError = error;
+  }
+  const api = resolveAtsApi(input);
+  if (!api) throw pageError;
+  let payload;
+  try {
+    payload = JSON.parse((await fetchPublic(api.apiUrl, "json")).body);
+  } catch (error) {
+    throw new Error(`${pageError.message}; ${api.ats} API fallback failed: ${error.message}`);
+  }
+  const posting = postingFromAtsPayload(api.ats, payload);
+  return { ...posting, captureMethod: "ats_api_content", sourceUrl: sanitizeUrl(input), capturedFromUrl: sanitizeUrl(api.apiUrl) };
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const fromFile = options.file ? (await readFile(options.file, "utf8")).split(/\r?\n/).map((line) => line.trim()).filter(Boolean) : [];
@@ -135,21 +171,19 @@ async function main() {
   let failed = 0;
   for (const input of urls) {
     try {
-      const fetched = await fetchPublic(input);
-      const posting = extractJobPosting(fetched.html);
-      const converted = sanitizeAndConvert(posting.description);
-      const sourceUrl = sanitizeUrl(fetched.url);
+      const posting = await fetchPosting(input);
+      const converted = sanitizeAndConvert(posting.html);
       const result = await writeCapture(options.root, {
         sourceType: "public_url",
-        captureMethod: "jsonld_jobposting",
-        sourceUrl,
-        capturedFromUrl: sourceUrl,
+        captureMethod: posting.captureMethod,
+        sourceUrl: posting.sourceUrl,
+        capturedFromUrl: posting.capturedFromUrl,
         pageTitle: posting.title || "Public job posting",
         converter: "turndown@7.2.4+jobsearchos.3",
         body: converted.markdown,
         snapshotHtml: options.snapshot ? wrapSnapshot(converted.sanitizedHtml) : null,
       });
-      console.log(`capture-url: wrote ${result.primary}`);
+      console.log(`capture-url: wrote ${result.primary} (${posting.captureMethod})`);
     } catch (error) {
       failed += 1;
       try {

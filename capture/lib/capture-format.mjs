@@ -7,7 +7,8 @@ export const CAPTURE_ID = /^web-\d{8}T\d{9}Z-[a-f0-9]{32}$/;
 export const COMPLETE_MARKER = "<!-- capture-complete -->";
 const SHA256 = /^sha256:[a-f0-9]{64}$/;
 const SOURCE_TYPES = new Set(["web_selection", "public_url", "manual_paste"]);
-const METHODS = new Set(["dom_selection", "jsonld_jobposting", "manual_paste"]);
+// ats_api_content: body taken from the ATS posting API.
+const METHODS = new Set(["dom_selection", "jsonld_jobposting", "manual_paste", "ats_api_content"]);
 
 export function createCaptureId(now = new Date()) {
   const timestamp = now.toISOString().replace(/[-:.]/g, "").replace("Z", "Z");
@@ -62,7 +63,7 @@ function parseScalar(value, lineNumber) {
   }
 }
 
-export function parseCaptureMarkdown(content) {
+export function parseCaptureMarkdown(content, { verifyContentHash = true } = {}) {
   const normalized = String(content).replace(/\r\n?/g, "\n");
   if (!normalized.startsWith("---\n")) throw new Error("missing capture frontmatter");
   const end = normalized.indexOf("\n---\n", 4);
@@ -77,11 +78,11 @@ export function parseCaptureMarkdown(content) {
   const bodyWithMarker = normalized.slice(end + 5);
   if (!bodyWithMarker.endsWith(`${COMPLETE_MARKER}\n`)) throw new Error("capture completion marker is missing");
   const body = bodyWithMarker.slice(0, -`${COMPLETE_MARKER}\n`.length);
-  validateFrontmatter(frontmatter, body);
+  validateFrontmatter(frontmatter, body, { verifyContentHash });
   return { frontmatter, body: normalizeBody(body) };
 }
 
-export function validateFrontmatter(frontmatter, body) {
+export function validateFrontmatter(frontmatter, body, { verifyContentHash = true } = {}) {
   const required = [
     "schema_version", "artifact_type", "trust_level", "source_type", "capture_id",
     "source_url", "captured_from_url", "captured_at", "page_title", "capture_method",
@@ -96,7 +97,8 @@ export function validateFrontmatter(frontmatter, body) {
   if (sanitizeUrl(frontmatter.captured_from_url) !== frontmatter.captured_from_url) throw new Error("captured-from URL is not normalized");
   if (typeof frontmatter.page_title !== "string" || frontmatter.page_title !== cleanPageString(frontmatter.page_title)) throw new Error("page title is invalid");
   if (typeof frontmatter.converter !== "string" || frontmatter.converter.length > 128) throw new Error("converter is invalid");
-  if (!SHA256.test(frontmatter.content_sha256) || frontmatter.content_sha256 !== sha256(normalizeBody(body))) throw new Error("content hash does not match body");
+  if (!SHA256.test(frontmatter.content_sha256)) throw new Error("content hash is invalid");
+  if (verifyContentHash && frontmatter.content_sha256 !== sha256(normalizeBody(body))) throw new Error("content hash does not match body");
   const expectedSnapshot = captureFilename(frontmatter.capture_id, ".source.html");
   const hasSnapshot = typeof frontmatter.source_snapshot === "string";
   if (hasSnapshot && frontmatter.source_snapshot !== expectedSnapshot) throw new Error("source snapshot filename is invalid");
