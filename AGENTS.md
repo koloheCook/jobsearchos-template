@@ -25,7 +25,7 @@ data/              tracker-mirror.json (LOCAL ONLY, never in git)
 out/mc/            jobsearch-manifest.json (schema v1, PRD 4.5)
 scripts/           deterministic node scripts + scripts/test-data/ (validator fixtures)
 .claude/skills/    jd-intake, meeting-brief, debrief, refresh-tracker-mirror, tailor-handoff, cross-agent-review, next-moves-audit, prompt-queue (symlinks; real files in .agents/skills/)
-.claude/hooks/     guard hook scripts (mirrored in .codex/hooks/)
+.claude/hooks/     guard hook scripts
 ```
 
 Machine-parseable formats (verdict banners, ledger/runs rows, folder slugs, log

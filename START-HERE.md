@@ -32,7 +32,7 @@ Copy each message into Claude Code, send it, and answer its questions. Wait for 
 ```
 I'm new to this. Please set up jobSearchOS for me from https://github.com/koloheCook/jobsearchos-template in a new folder called jobsearchos, and work inside that folder from now on.
 First check whether Node.js, git and jq are installed on my computer. For anything missing, explain in one sentence what it is and walk me through installing it.
-Then run the project's setup and self-tests from its README (the Quickstart and Setup sections). Tell me in plain words whether everything passed. Don't change any of the project's files.
+Then run the project's setup and self-tests from its README (the Quickstart and Setup sections). Tell me in plain words whether everything passed (a few "skipped" tests are normal). Don't change the project's files yet.
 ```
 
 **2. Choose the companies to watch.** It will ask you which companies and which job titles.
@@ -52,25 +52,41 @@ When we're done, save my answers, mark the rubric as calibrated with today's dat
 
 Until this step is done, every job scores EXPLORE at most, so a half-finished setup can never tell you to go after a job.
 
-**4. Try it.**
+**4. Score your first job.** Pick one real job posting you're curious about and copy its link.
 
 ```
-Run the job-board check, save any new postings, then score them with jd-intake. Show me each job with its score and one sentence on why. Explain anything I might not understand.
+Score this job for me with jobSearchOS: [paste the job link]
+Capture it with node capture/cli/capture-url.mjs --url and the link. If that site can't be captured, tell me in plain words and help me save the page as a PDF into the landing folder instead.
+Then run jd-intake on it, then run node scripts/daily-report.mjs. Show me the verdict and the reasons in plain words, and tell me what I should do next with this job.
 ```
 
-The first check only learns what's already posted, so it usually finds nothing new. That's expected. Tomorrow's check shows only new postings.
+You'll see one of three verdicts. **PURSUE** means it fits; read the reasons, confirm it in the assessment if you agree, and apply yourself. **EXPLORE** means it might fit; read why and decide. **PASS** means it doesn't fit your rubric.
+
+Also run the job-board check once (`node board-watch/board-watch.mjs`, or ask your assistant). The first check only saves what's already posted as a starting point, so it finds nothing new today. That's expected: from tomorrow on it shows only postings that are new.
 
 **5. Make it run every morning.**
 
 ```
-Set up a scheduled task that runs every morning at a time I choose (ask me): check the job boards, save new postings, score them with jd-intake, and give me a short summary. Never apply to anything.
+Set up a scheduled task that runs every morning at a time I choose (ask me): run node board-watch/board-watch.mjs, then node capture/cli/capture-url.mjs --file board-watch/out/new-urls.txt, then score anything new with jd-intake, then run node scripts/daily-report.mjs and give me a short summary of the report. Never apply to anything.
 ```
+
+The task runs only while your computer is awake and the Claude app is open. Each run writes a report you can open any time: `reports/` followed by the date, for example `reports/2026-10-21.md`. It lists new postings, what was scored, what is waiting on you, and what to do next. Most mornings have nothing new; the report says so.
 
 ## Using it day to day
 
-- **Each morning:** read the summary. For a PURSUE, open its assessment, decide, and apply yourself.
+- **Each morning:** open today's report in the `reports` folder (or read the summary your assistant gives you). For a PURSUE, open its assessment, decide, and apply yourself.
 - **Found a job somewhere else?** Save it with the Chrome extension (ask your assistant to set it up), or drop the PDF into the `landing` folder, then say "run jd-intake".
 - **Got a call booked?** Say "run meeting-brief" and give it 2 or 3 goals for the call. After the call, say "run debrief" the same day. These are **beta**: built but not yet tested on real calls.
+
+## Already track jobs in Notion? (optional)
+
+You don't need Notion; the daily report is the default way to see your pipeline. If you already keep a job tracker in Notion, jobSearchOS can read it (never write to it). That adds two things: roles you marked "Not Interested" stop showing up as new, and the weekly overdue check can see the next-step dates you keep there. Your tracker probably uses different column names than the script expects, so ask your assistant to adapt it:
+
+```
+I keep my job tracker in Notion. Help me connect it to jobSearchOS read-only, following the "Connect Notion" section of README.md.
+Ask me what my tracker's columns are called and what status values I use, then adapt scripts/refresh-tracker-mirror.mjs to match my tracker instead of asking me to rename anything in Notion. If my Company column is plain text rather than a link to a Companies database, handle that.
+Tell me the exact file and variable names for my Notion key and IDs, and where to find each ID in Notion. I'll type the key into .env myself; never ask me for it.
+```
 
 ## Using Codex
 

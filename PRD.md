@@ -39,7 +39,7 @@ template; section numbers cited elsewhere in the repo (4.7, 6.B*) are preserved 
    enters git history.
 7. **Guards are enforced, not hoped for.** Generating skills bind named guards (no-invented-
    metric, ask-dont-guess, evidence markers); a number or fact with no source does not appear
-   in an output, and the hooks in `.claude/hooks/` (mirrored in `.codex/hooks/`) catch
+   in an output, and the hooks in `.claude/hooks/` catch
    violations as you write.
 8. **Deterministic-shaped steps become scripts, not LLM calls** (ledger diff, folder scaffold,
    manifest emit, tracker mirror).

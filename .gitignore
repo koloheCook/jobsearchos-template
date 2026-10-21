@@ -42,3 +42,6 @@ session-report-*.html
 # board-watch run state and output (local to each user)
 board-watch/state/
 board-watch/out/
+
+# Daily reports: they name real roles, so they stay local
+/reports/

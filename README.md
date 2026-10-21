@@ -196,9 +196,11 @@ node board-watch/board-watch.mjs
 node capture/cli/capture-url.mjs --file board-watch/out/new-urls.txt
 ```
 
-Then run `jd-intake` in Claude Code. Two ways to make that automatic:
+Then run `jd-intake` in Claude Code, then `node scripts/daily-report.mjs`. The report lands in `reports/<date>.md`: new postings, what was scored, what is waiting on you, and what to do next. It is the default way to see your pipeline; the Notion tracker below is optional. `reports/` is gitignored because it names real roles. On a morning with no new postings, the capture step prints "nothing to capture" and the rest still runs.
 
-- **Claude Code desktop app (simplest):** create a scheduled task on this folder, daily at a time you like, with the prompt: "Run `node board-watch/board-watch.mjs`, then `node capture/cli/capture-url.mjs --file board-watch/out/new-urls.txt`, then run the jd-intake skill on everything new and summarize the verdicts." You read the summary with your coffee.
+To capture one link by hand: `node capture/cli/capture-url.mjs --url <job-posting-url>`. Some company sites do not publish the structured data it needs; for those, clip the page with the Chrome extension or save it as a PDF into `landing/`. Two ways to make that automatic:
+
+- **Claude Code desktop app (simplest):** create a scheduled task on this folder, daily at a time you like, with the prompt: "Run `node board-watch/board-watch.mjs`, then `node capture/cli/capture-url.mjs --file board-watch/out/new-urls.txt`, then run the jd-intake skill on everything new, then run `node scripts/daily-report.mjs` and summarize the report." The scheduled task runs only while your computer is awake and the app is open.
 - **Plain cron or launchd (discovery only):** schedule the two `node` commands above; they need no AI. Run `jd-intake` yourself when you sit down.
 
 Either way, board-watch never applies, never writes to a tracker, and never sets a verdict. It only finds new links.

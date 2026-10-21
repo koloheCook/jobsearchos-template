@@ -146,7 +146,8 @@ export async function run({ root, dryRun, fetchImpl, declineMirrorPath = path.re
 
 function report({ results, emitted, suppressedDeclines, overflow }) {
   for (const r of results) {
-    if (r.skipped) console.log(`  ${r.org}: SKIPPED (${r.skipped}) ${r.detail}`);
+    if (r.skipped === "seed_only") console.log(`  ${r.org}: first check, saved a baseline (${r.detail}); only postings added after today count as new`);
+    else if (r.skipped) console.log(`  ${r.org}: SKIPPED (${r.skipped}) ${r.detail}`);
     else console.log(`  ${r.org}: ${r.counts.prior} -> ${r.counts.current}, ${r.added.length} new on-target`);
   }
   console.log(`emitted ${emitted.length} url(s)${overflow > 0 ? `, ${overflow} held back by the cap` : ""}`);

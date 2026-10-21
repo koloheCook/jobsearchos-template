@@ -30,7 +30,7 @@ function parseArgs(argv) {
     else if (argv[index] === "--file" && argv[index + 1]) file = argv[++index];
     else if (argv[index] === "--no-snapshot") snapshot = false;
     else if (argv[index] === "--root" && argv[index + 1] && process.env.JOBSEARCHOS_TEST_MODE === "1") root = path.resolve(argv[++index]);
-    else throw new Error(`unknown or incomplete argument: ${argv[index]}`);
+    else throw new Error(`unknown or incomplete argument: ${argv[index]} (usage: --url <url> ... or --file <path>)`);
   }
   return { urls, file, snapshot, root };
 }
@@ -167,7 +167,12 @@ async function main() {
   const options = parseArgs(process.argv.slice(2));
   const fromFile = options.file ? (await readFile(options.file, "utf8")).split(/\r?\n/).map((line) => line.trim()).filter(Boolean) : [];
   const urls = [...new Set([...options.urls, ...fromFile])];
-  if (urls.length === 0 || urls.length > MAX_URLS) throw new Error(`provide between 1 and ${MAX_URLS} URLs`);
+  // An empty queue file is the normal no-new-postings morning, not an error.
+  if (urls.length === 0 && options.file && options.urls.length === 0) {
+    console.log(`capture-url: nothing to capture (${options.file} has no URLs)`);
+    return;
+  }
+  if (urls.length === 0 || urls.length > MAX_URLS) throw new Error(`provide between 1 and ${MAX_URLS} URLs (usage: --url <url> ... or --file <path>)`);
   let failed = 0;
   for (const input of urls) {
     try {

@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 import { CAPTURE_DIRECTORY, CAPTURE_MARKER, formatCaptureMarkdown, parseCaptureMarkdown } from "./lib/capture-format.mjs";
 import { sanitizeAndConvert, wrapSnapshot } from "./lib/html-sanitize.mjs";
 import { writeCapture } from "./lib/capture-writer.mjs";
@@ -221,4 +222,16 @@ test("extension manifest keeps its narrow permission and no-network boundary", a
   assert.match(source, /await snapshotActiveSelection\(chrome\)/);
   assert.match(source, /const selected = pendingSelection;/);
   assert.match(source, /void primeSelection\(\)/);
+});
+
+test("capture-url treats an empty --file queue as nothing to do, not a failure", async () => {
+  const dir = await mkdtemp(path.join(os.tmpdir(), "jobsearchos-empty-queue-"));
+  const queue = path.join(dir, "new-urls.txt");
+  await writeFile(queue, "");
+  const cli = path.join(path.dirname(fileURLToPath(import.meta.url)), "cli", "capture-url.mjs");
+  const run = spawnSync(process.execPath, [cli, "--file", queue], { encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr);
+  assert.match(run.stdout, /nothing to capture/);
+  const bare = spawnSync(process.execPath, [cli], { encoding: "utf8" });
+  assert.notEqual(bare.status, 0, "no arguments at all is still a usage error");
 });
