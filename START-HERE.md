@@ -11,7 +11,7 @@ Every morning it checks the job boards of companies you choose, saves any new po
 
 ## What you need
 
-- **A Mac.** Linux should work too. Windows is untested.
+- **A Mac.** Linux should work too. On Windows, see "On Windows (untested)" below before you start.
 - **A paid Claude plan** (Pro or higher), so you can use **Claude Code**, the part of Claude that can work with files on your computer. Get the Claude desktop app from claude.ai/download and open its **Code** tab. If you use Codex instead, that works for setup too (see "Using Codex" below).
 - **About 30 minutes** for setup. Your assistant will check for and help you install the three free tools this needs (Node.js, git and jq). You do not need to know what they are.
 
@@ -77,6 +77,26 @@ The task runs only while your computer is awake and the Claude app is open. Each
 - **Each morning:** open today's report in the `reports` folder (or read the summary your assistant gives you). For a PURSUE, open its assessment, decide, and apply yourself.
 - **Found a job somewhere else?** Save it with the Chrome extension (ask your assistant to set it up), or drop the PDF into the `landing` folder, then say "run jd-intake".
 - **Got a call booked?** Say "run meeting-brief" and give it 2 or 3 goals for the call. After the call, say "run debrief" the same day. These are **beta**: built but not yet tested on real calls.
+
+## On Windows (untested)
+
+Nobody has tried jobSearchOS on Windows yet, so expect a bump or two. Do these **before** setup step 1:
+
+1. **Turn on Developer Mode:** Settings > System > For developers > Developer Mode. jobSearchOS uses shortcut links between folders, and Windows only creates them with this on. Without it, the jd-intake and other commands won't load.
+2. **Install the tools.** Open PowerShell and run these, one line at a time (or paste them to your assistant and ask it to run them):
+
+```
+winget install Git.Git
+winget install OpenJS.NodeJS.LTS
+winget install jqlang.jq
+winget install Python.Python.3.12
+```
+
+Git for Windows includes **Git Bash**, which the safety checks need. Restart the Claude app after installing so it finds the new tools.
+
+3. **In setup step 1, add this line to the message:** "This is Windows: clone with `git clone -c core.symlinks=true`, and check that the folders in `.claude/skills` are links, not small text files."
+
+**If that doesn't work, use WSL** (Windows Subsystem for Linux, Microsoft's built-in way to run Linux inside Windows). Inside WSL, jobSearchOS behaves as it does on a Mac. Ask your assistant: "Help me install WSL and set up jobSearchOS inside it."
 
 ## Already track jobs in Notion? (optional)
 
