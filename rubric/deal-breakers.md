@@ -20,9 +20,10 @@ like a FAILED one, until a named fact resolves it -- EXCEPT the comp carve-out i
 3. **Industry / values exclusion:** <OWNER: any industries or business models you
    rule out on principle, e.g. defense/weapons, gambling, adult, surveillance --
    auto-PASS.>
-4. **Security clearance:** a role that requires, or may require, a U.S. security clearance
-   the owner does not hold (Confidential, Secret, Top Secret, TS/SCI, or any DoD/IC
-   clearance) -- FAIL (owner holds no clearances). This covers a present requirement to hold
+4. **Security clearance:** <OWNER: which U.S. security clearances you hold, or "none".> A
+   role that requires, or may require, a clearance you do not hold (Confidential, Secret,
+   Top Secret, TS/SCI, or any DoD/IC clearance) -- FAIL. Delete this rule if clearance
+   roles are fine for you. This covers a present requirement to hold
    an active clearance AND a conditional or future requirement to obtain, hold, be eligible
    for, or be able to obtain one (for example "may be expected to obtain and hold", "must be
    able to obtain", "clearance-eligible"). A JD that states no clearance is required, or is

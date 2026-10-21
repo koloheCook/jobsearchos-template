@@ -41,7 +41,7 @@ target folder already exists, report the collision and skip -- never overwrite.
         otherwise score from the JD + rubric and say so.
       - Apply `rubric/deal-breakers.md`: each one RESOLVED-PASS / RESOLVED-FAIL /
         UNRESOLVED with the named fact or missing fact.
-      - **If any `[OWNER: ...]` placeholder in rubric/ is unfilled, the rubric is
+      - **If any `<OWNER: ...>` placeholder in rubric/ is unfilled, the rubric is
         UNCALIBRATED: cap the verdict at EXPLORE and print that on the banner.**
       - PURSUE is always "PURSUE (awaiting owner confirmation)".
    e. Append the ledger row (never edit existing rows).

@@ -38,14 +38,11 @@ them here in the same pass.
 - 2: Evidence is mostly adjacent, with few direct must-haves.
 - 1: Evidence is tangential or generic rather than JD-specific.
 
-**Builder trip-wire (owner-set 2026-07-16).** `fit-rubric.md`'s primary trip-wire --
-a safety/AI-titled TPM/PM role whose must-haves are really technical-builder or
-eng-leadership work -- also fires on this side. When it fires, dimension 1 **floors
-to 1-2 regardless of adjacent evidence**, and the trip-wire is named in the
-assessment. Rationale: the owner does not fit a builder role, so adjacency-driven
-confidence here would be false confidence carried into TAILOR-1. The trip-wire keys
-on the builder ask, not on the word "lead": leading teams that build ML systems, and
-owning ML data/metrics/vendor ops, stay in-lane and do not fire it.
+**Trip-wire (optional).** <OWNER: a role that looks like your lane by title but whose
+must-haves are really a different job you do not fit, e.g. a PM-titled role that is
+really hands-on engineering. Describe what fires it and what does NOT, or write "none".>
+When it fires, dimension 1 **floors to 1-2 regardless of adjacent evidence**, and the
+trip-wire is named in the assessment, so adjacency never turns into false confidence.
 
 ## 2. Evidence strength
 
@@ -57,12 +54,12 @@ Judged only against the two sources named above.
 - 2: Evidence is mostly qualitative, indirect, or weakly sourced.
 - 1: No sourced evidence currently supports the must-haves.
 
-A fact the owner believes but cannot trace to `master_cv.md` or surfaced NotebookLM
-output scores as unsourced. Name the gap; do not round up.
+A fact you believe but cannot trace to one of the evidence sources above scores as
+unsourced. Name the gap; do not round up.
 
 ## 3. Differentiation value
 
-What is rare here, owner-set 2026-07-16, in priority order:
+What is rare about you, in priority order:
 
 - **Primary edge:** <OWNER: the combination of strengths that few other candidates
   hold together -- name both sides of the pairing and why holding both is rare.>
@@ -71,8 +68,7 @@ What is rare here, owner-set 2026-07-16, in priority order:
 
 Score:
 
-- 5: Sourced evidence shows the primary edge -- both ops rigor at scale AND
-  safety/integrity domain depth.
+- 5: Sourced evidence shows the primary edge -- both sides of the pairing.
 - 4: The primary edge is partly sourced, or the secondary edge is sourced and
   materially strengthens the fit for this JD.
 - 3: Useful evidence, but common for the role type (strong on one axis only).
@@ -83,10 +79,9 @@ The secondary edge supports; it does not carry a 5 on its own.
 
 ## 4. Recency (SOFT -- never a disqualifier)
 
-Window owner-set 2026-07-16 at roughly 4 years: ops fundamentals age more slowly
-than tooling, and the wider window fairly reflects longer tenures.
+Window: <OWNER: how many years counts as recent for your field, e.g. roughly 4 years.>
 
-- 5: Relevant sourced evidence is from roughly the last 4 years -- current practice.
+- 5: Relevant sourced evidence is inside your recency window -- current practice.
 - 4: Evidence is older than that but still clearly relevant to the JD.
 - 3: Evidence is materially older and directly relevant.
 - 2: Evidence is materially older and only adjacent.
@@ -97,7 +92,7 @@ reason to withhold a PURSUE.
 
 ## Bands to You-fit-role axis
 
-Confirmed as shipped, owner pass 2026-07-16. The dimension-1 floor on Strong is the
+Default bands; adjust after backtesting. The dimension-1 floor on Strong is the
 load-bearing part: it stops a high total from masking poor JD relevance.
 
 - **Strong:** 17-20 and dimension 1 >= 4 -> 8-10/10.
@@ -110,6 +105,6 @@ No target-lane exceptions. Revisit after backtesting, as `fit-rubric.md` was.
 ## Use in assessments
 
 - Cite this rubric version beside the You-fit-role score.
-- Keep the owner-calibrated `fit-rubric.md` as the sole Role-fits-you instrument.
-- This rubric is CALIBRATED as of 2026-07-16. The `rubric UNCALIBRATED, capped`
-  label no longer applies to it. Verdicts remain owner-confirmed per CLAUDE.md rule 1.
+- Keep `fit-rubric.md` as the sole Role-fits-you instrument.
+- Once every `<OWNER: ...>` field above is filled, change the Status line at the top
+  to CALIBRATED with the date. Verdicts always remain owner-confirmed per CLAUDE.md.

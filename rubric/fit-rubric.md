@@ -6,7 +6,7 @@
 target lanes, level, comp floor, location constraints, and mission signals, then
 backtest against your own past roles (see `prompts/jobSearchOS_rubric_backtest.md`
 and `prompts/backtest_synthesis.md`) before trusting verdicts above EXPLORE
-(CLAUDE.md rule 7). Score against written anchors only; nothing inferred from
+(CLAUDE.md rule 5). Score against written anchors only; nothing inferred from
 career data (ASK-DONT-GUESS).
 
 ## Target lanes (tiered)
