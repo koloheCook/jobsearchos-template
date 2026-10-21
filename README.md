@@ -1,5 +1,7 @@
 # jobSearchOS
 
+**New to AI tools like Claude or Codex? Start with [START-HERE.md](START-HERE.md).** It is a plain-language, copy-and-paste setup where your AI assistant does the work and asks you only what it can't know. The rest of this README is the technical reference.
+
 jobSearchOS is a job-search operating system built for Claude Code (and, optionally,
 Codex): capture -> triage -> pursue -> meet -> learn. It turns a job description
 into a scored, gated assessment before you spend a single hour tailoring materials,
