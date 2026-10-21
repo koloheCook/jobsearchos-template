@@ -68,8 +68,8 @@ the scoring *structure* intact but none of the calibration filled in. Until you
 calibrate them, verdicts are capped at `EXPLORE` by design (see `CLAUDE.md`) so a
 default rubric can't accidentally green-light a role it knows nothing about.
 
-Everything else lives as a Claude Code skill under `.claude/skills/` (mirrored for
-Codex under `.agents/skills/`):
+Everything else lives as a skill under `.agents/skills/` (read by Codex; `.claude/skills/`
+holds a symlink to each one for Claude Code):
 
 | Skill | When |
 |---|---|
@@ -80,7 +80,7 @@ Codex under `.agents/skills/`):
 | `refresh-tracker-mirror` | Refresh the optional Notion tracker mirror |
 | `tailor-handoff` | Optional -- hand a qualified opportunity to a separate tailoring project (see its portability note) |
 
-**Builder tools (optional, safe to delete).** Two skills exist for maintaining this repo with two AI agents, not for running a job search: `cross-agent-review` (settles a disagreement between Claude and Codex in bounded rounds) and `prompt-queue` (tracks which saved prompt in `prompts/` to run next). Ignore them, or delete their folders under `.claude/skills/`.
+**Builder tools (optional, safe to delete).** Two skills exist for maintaining this repo with two AI agents, not for running a job search: `cross-agent-review` (settles a disagreement between Claude and Codex in bounded rounds) and `prompt-queue` (tracks which saved prompt in `prompts/` to run next). Ignore them, or delete their folders under `.agents/skills/` and the matching links under `.claude/skills/`.
 
 See `PRD.md` for the full architecture and design rationale, and `AGENTS.md` /
 `CLAUDE.md` for the operating rules both agents follow (never commit career
@@ -91,8 +91,8 @@ content, Notion tracker is read-only, no invented metrics, etc.).
 - **Node.js** (any recent LTS -- the scripts use only long-stable `node:` builtins,
   no build step).
 - **jq**, which the guard hooks use to read their input (`brew install jq` on a Mac).
-- **Claude Code**, for the skills and guard hooks. Codex is optional and mirrors a
-  subset of skills under `.agents/skills/`.
+- **Claude Code**, for the skills and guard hooks. Codex is optional and reads the same
+  skills from `.agents/skills/`.
 - **Google Chrome**, only if you want the optional web-capture extension.
 - **A Notion workspace with a job tracker**, only if you want the pipeline mirror.
   The core triage loop works without Notion.
@@ -134,8 +134,8 @@ content, Notion tracker is read-only, no invented metrics, etc.).
    context if you like, but nothing there gates the pipeline.
 9. **Decide on `tailor-handoff`.** It assumes a separate downstream project that
    turns a qualified opportunity into tailored application materials. If you don't
-   have one, remove the skill (both `.claude/skills/tailor-handoff` and
-   `.agents/skills/tailor-handoff`), or adapt it to whatever tool you use.
+   have one, remove the skill (`.agents/skills/tailor-handoff` and its
+   `.claude/skills/tailor-handoff` symlink), or adapt it to whatever tool you use.
 10. **Author your positioning playbook.** `playbook/` ships as an empty container --
     `index.md` (a routing table) and `core-messaging.md`, both blank scaffolds. The
     `meeting-brief` skill loads playbook modules to build a call brief, so before your
