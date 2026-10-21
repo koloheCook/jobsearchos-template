@@ -73,14 +73,14 @@ Codex under `.agents/skills/`):
 
 | Skill | When |
 |---|---|
-| `jd-intake` | New JD PDFs land in `landing/`; batch-processes everything new |
-| `meeting-brief` | A call is scheduled; you supply objectives |
+| `jd-intake` | New JD PDFs or captures land in `landing/`; batch-processes everything new |
+| `meeting-brief` | A call is scheduled; you supply 2-3 written objectives |
 | `debrief` | Same day as any completed call |
+| `next-moves-audit` | On demand: what's overdue across debriefs, verdicts, and next moves |
 | `refresh-tracker-mirror` | Refresh the optional Notion tracker mirror |
 | `tailor-handoff` | Optional -- hand a qualified opportunity to a separate tailoring project (see its portability note) |
-| `cross-agent-review` | A Claude/Codex finding on the same deliverable needs a bounded review |
-| `next-moves-audit` | On-demand: what's overdue across debriefs, verdicts, and next moves |
-| `prompt-queue` | Track what to run next, or log a new handoff prompt |
+
+**Builder tools (optional, safe to delete).** Two skills exist for maintaining this repo with two AI agents, not for running a job search: `cross-agent-review` (settles a disagreement between Claude and Codex in bounded rounds) and `prompt-queue` (tracks which saved prompt in `prompts/` to run next). Ignore them, or delete their folders under `.claude/skills/`.
 
 See `PRD.md` for the full architecture and design rationale, and `AGENTS.md` /
 `CLAUDE.md` for the operating rules both agents follow (never commit career
@@ -224,6 +224,26 @@ gitignored -- `opportunities/`, `data/`, `networking/`, and everything in
 `landing/` except the append-only ledger, run log, and READMEs never enter git.
 Keep it that way; the pre-commit guard (step 2 above) is there to help, not to
 replace judgment.
+
+## Before and after a call
+
+**Before (`/meeting-brief`).** Once a role has an assessment and a call is on the calendar, run `/meeting-brief`. It first asks for your 2-3 written objectives for this specific call (no objectives, no brief), plus who you are meeting, how many times you have met, and how long the call is. Paste in anything useful about the person or company. It reads the role's folder, including every earlier brief and debrief, and writes a one-page `opportunities/<role>/meetings/<date>_<slug>/brief.md`: posture, opening line, questions, the question they are most likely to ask you with a three-beat answer, your ask, and traps drawn from your own past debriefs. It works better once you have written playbook modules (setup step 10), but runs without them on stories you supply.
+
+**After (`/debrief`), the same day.** Paste your notes or just talk it through. It scores the call against the brief's objectives (hit / partial / not), lists what went well with evidence, names ONE coaching problem, and sets three dated next moves in `debrief.md` next to the brief. It will not write your follow-up email for you: you draft it, then ask it to polish. The next brief for the same role reads this debrief, so its coaching problem becomes the next call's trap to avoid.
+
+**Weekly (`/next-moves-audit`).** A read-only check across all your roles: debrief next moves whose date has passed, PURSUE verdicts you never confirmed, and calls that happened with no debrief. It ends with the one thing to do first. It writes nothing.
+
+## Test the rubric on past roles (backtest)
+
+Do this after calibrating the rubric (step 6) and before trusting its verdicts. Open Claude Code and say: "Follow `prompts/jobSearchOS_rubric_backtest.md` for this role:" followed by a link to, or the pasted text of, a job you applied to or seriously considered. It scores that one role, asks for your gut call, and appends a MATCH or MISMATCH row to `rubric/backtest-log.md`, naming the rubric axis at fault when it disagrees with you. Do 5-10 past roles, one per session, then run `prompts/backtest_synthesis.md` the same way to get proposed rubric edits.
+
+## What the guard hooks do
+
+Claude Code runs a few checks automatically whenever it writes an assessment or ledger row: no salary or metric that is not in the job description, every job description marked as a literal extraction, verdict banners in the right shape, and ledger rows that parse. They warn rather than block, except the verdict gate, which stops tailoring until you have confirmed a PURSUE verdict, and log each hit to `.claude/metrics/guard-hits.jsonl`, which stays local. If you see one fire, the fix is usually to cite the source or correct the format.
+
+## Files you can ignore
+
+`out/mc/jobsearch-manifest.json` is a machine-readable list of roles and pending verdicts that `jd-intake` keeps up to date and `next-moves-audit` reads; you never edit it. The scripts `write-preflight`, `intake-concurrency`, `ledger-diff`, `emit-manifest` and `requisition-key` are internal plumbing for those skills.
 
 ## Third-party notices
 

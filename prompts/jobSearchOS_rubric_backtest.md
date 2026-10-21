@@ -1,17 +1,17 @@
 # jobSearchOS rubric backtest — single role
 
-The rubric (rubric/fit-rubric.md + rubric/deal-breakers.md) was owner-calibrated
-2026-07-06. Before trusting it live, backtest it against past roles I was interested
+Once you have calibrated the rubric (rubric/fit-rubric.md + rubric/deal-breakers.md),
+before trusting it live, backtest it against past roles I was interested
 in or applied to. One role per session to keep scoring clean; results aggregate to
 rubric/backtest-log.md.
 
-ROLE FOR THIS SESSION: <paste the Notion page URL or JD link for the past role you're backtesting>
+ROLE FOR THIS SESSION: <paste a Notion page URL, a JD link, or the JD text for the past role you're backtesting>
 
 Do this, in order:
 1. Read rubric/fit-rubric.md and rubric/deal-breakers.md fresh. They are the source of
    truth — score against the WRITTEN anchors, not memory or vibes.
-2. Open the Notion page above and read the PAGE BODY where the full JD is transcribed,
-   not just the title.
+2. Read the full JD from the link or pasted text above (for a Notion page, read the PAGE
+   BODY where the JD is transcribed, not just the title).
 3. Score each fit-rubric axis (Lane fit, Level, Comp, Location/remote, Mission/domain
    pull) 0-10 against the written anchors only. For each score, cite the exact anchor
    that produced it (SCRIBE / cite-the-anchor). No invented facts (NO-INVENTED-METRIC,

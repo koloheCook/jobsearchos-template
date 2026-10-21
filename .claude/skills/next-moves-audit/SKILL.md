@@ -11,11 +11,11 @@ passed. This skill is that check. Owner-invoked, on demand only: a scheduled
 version would be a later enhancement and needs an explicit owner decision first.
 
 ## Inputs (all read-only)
-- `opportunities/*/debrief*.md` -- "Next 3 moves" section: numbered lines shaped
+- `opportunities/*/meetings/*/debrief.md` -- "Next 3 moves" section: numbered lines shaped
   `<n>. <move> -- by <date>` (templates/debrief.md).
 - `opportunities/*/assessment.md` -- verdict banner and Confirmed line, parsed per
   the PRD 4.7 grammar (`^## VERDICT: ...`), never an improvised regex.
-- `opportunities/*/meeting-brief*.md` -- evidence a call was scheduled/held.
+- `opportunities/*/meetings/*/brief.md` -- evidence a call was scheduled/held.
 - `out/mc/jobsearch-manifest.json` -- pendingVerdicts cross-check.
 - `data/tracker-mirror.json` when present -- Next Step / Next Step Date fields
   (may be null until you add those properties to your tracker).
