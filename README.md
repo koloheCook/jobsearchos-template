@@ -49,10 +49,10 @@ The full setup below covers the optional pieces: the Chrome capture extension, t
    (you-fit-role), runs the hard `rubric/deal-breakers.md` gate, and writes a
    `PURSUE | EXPLORE | PASS` verdict to a new `opportunities/<slug>/assessment.md`.
    Nothing is tailored or pursued without your explicit confirmation.
-3. **Meet** (`meeting-brief` skill) -- given your own written objectives for an
+3. **Meet** (`meeting-brief` skill, beta) -- given your own written objectives for an
    upcoming call, produces a brief: posture, opening line, questions, and a
    defined ask.
-4. **Learn** (`debrief` skill) -- scores the call against those objectives the same
+4. **Learn** (`debrief` skill, beta) -- scores the call against those objectives the same
    day, names ONE coaching problem, and sets dated next moves.
 
 A deterministic script layer (`scripts/`) keeps the ledger, the manifest, and the
@@ -74,9 +74,9 @@ holds a symlink to each one for Claude Code):
 | Skill | When |
 |---|---|
 | `jd-intake` | New JD PDFs or captures land in `landing/`; batch-processes everything new |
-| `meeting-brief` | A call is scheduled; you supply 2-3 written objectives |
-| `debrief` | Same day as any completed call |
-| `next-moves-audit` | On demand: what's overdue across debriefs, verdicts, and next moves |
+| `meeting-brief` (beta) | A call is scheduled; you supply 2-3 written objectives |
+| `debrief` (beta) | Same day as any completed call |
+| `next-moves-audit` (beta) | On demand: what's overdue across debriefs, verdicts, and next moves |
 | `refresh-tracker-mirror` | Refresh the optional Notion tracker mirror |
 | `tailor-handoff` | Optional -- hand a qualified opportunity to a separate tailoring project (see its portability note) |
 
@@ -226,7 +226,9 @@ gitignored -- `opportunities/`, `data/`, `networking/`, and everything in
 Keep it that way; the pre-commit guard (step 2 above) is there to help, not to
 replace judgment.
 
-## Before and after a call
+## Before and after a call (beta)
+
+**Beta:** these three skills are built and documented but have not yet been used on a real call by the original author. They only run when you call them, and they write only into your own role folders, so the worst case is a thin or awkward brief. Try them, and open an issue on GitHub with anything that breaks or feels wrong.
 
 **Before (`/meeting-brief`).** Once a role has an assessment and a call is on the calendar, run `/meeting-brief`. It first asks for your 2-3 written objectives for this specific call (no objectives, no brief), plus who you are meeting, how many times you have met, and how long the call is. Paste in anything useful about the person or company. It reads the role's folder, including every earlier brief and debrief, and writes a one-page `opportunities/<role>/meetings/<date>_<slug>/brief.md`: posture, opening line, questions, the question they are most likely to ask you with a three-beat answer, your ask, and traps drawn from your own past debriefs. It works better once you have written playbook modules (setup step 10), but runs without them on stories you supply.
 

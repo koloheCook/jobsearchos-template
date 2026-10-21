@@ -1,9 +1,11 @@
 ---
 name: debrief
-description: Same-day post-call debrief scored against the meeting brief's objectives. Use when the owner says "debrief", "just got off a call", or finished any interview or networking conversation. Produces one named coaching problem and three dated next moves.
+description: BETA, not yet field-tested. Same-day post-call debrief scored against the meeting brief's objectives. Use when the owner says "debrief", "just got off a call", or finished any interview or networking conversation. Produces one named coaching problem and three dated next moves.
 ---
 
 # debrief
+
+> **Beta.** Built and documented, but not yet used on a real call by the original author. Tell the user once that this skill is beta, then proceed; if a step does not fit their situation, say so plainly instead of forcing it.
 
 The objective read after a call: what happened vs what the owner wanted to happen,
 one coaching problem, dated next moves. Run it the same day while the owner's read

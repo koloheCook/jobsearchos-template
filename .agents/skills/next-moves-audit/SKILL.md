@@ -1,9 +1,11 @@
 ---
 name: next-moves-audit
-description: Report-only follow-through audit of the live pipeline. Surfaces overdue debrief next moves, PURSUE verdicts still awaiting owner confirmation, and completed calls missing a same-day debrief. Use when the owner asks "what's overdue", "what am I dropping", "pipeline check", or "audit my next moves". Never drafts follow-ups and never writes anything.
+description: BETA, not yet field-tested. Report-only follow-through audit of the live pipeline. Surfaces overdue debrief next moves, PURSUE verdicts still awaiting owner confirmation, and completed calls missing a same-day debrief. Use when the owner asks "what's overdue", "what am I dropping", "pipeline check", or "audit my next moves". Never drafts follow-ups and never writes anything.
 ---
 
 # next-moves-audit
+
+> **Beta.** Built and documented, but not yet used on a real call by the original author. Tell the user once that this skill is beta, then proceed; if a step does not fit their situation, say so plainly instead of forcing it.
 
 The capture side of the system produces dated commitments (three next moves per
 debrief, verdict banners per assessment); nothing else checks whether those dates

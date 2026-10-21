@@ -1,9 +1,11 @@
 ---
 name: meeting-brief
-description: Produce the one-page pre-call brief for a scheduled conversation, built around owner-written objectives. Use when the owner says "brief me for", "prep for my call with", or a meeting is scheduled on a live opportunity. Refuses to run without objectives.
+description: BETA, not yet field-tested. Produce the one-page pre-call brief for a scheduled conversation, built around owner-written objectives. Use when the owner says "brief me for", "prep for my call with", or a meeting is scheduled on a live opportunity. Refuses to run without objectives.
 ---
 
 # meeting-brief
+
+> **Beta.** Built and documented, but not yet used on a real call by the original author. Tell the user once that this skill is beta, then proceed; if a step does not fit their situation, say so plainly instead of forcing it.
 
 One page the owner walks into the call with: posture, opener, questions, the
 expected key question with three beats, a defined ask, traps, and a walk-out-with
