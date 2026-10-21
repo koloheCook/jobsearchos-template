@@ -72,7 +72,7 @@ templates/              field contracts for assessment / meeting-brief / debrief
 data/                   tracker-mirror.json (read-only mirror; never committed)
 out/                    published surfaces: digest + mc/jobsearch-manifest.json
 scripts/                deterministic helpers + the output validator
-.claude/skills/         jd-intake, meeting-brief, debrief, ... (mirrored in .agents/skills/)
+.claude/skills/         jd-intake, meeting-brief, debrief, ... (symlinks to .agents/skills/)
 ```
 
 ### 4.3 The artifact pipeline
