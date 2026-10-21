@@ -35,10 +35,13 @@ lines) are contracted in PRD 4.7. Scripts and hooks parse ONLY through that gram
 
 - **LOCAL** (an agent pointed at your on-disk working tree): full access to `opportunities/`,
   `landing/`, `data/` on disk. These dirs are readable and writable per the zone rules below
-  but NEVER committed. General concurrency rule: if multiple agent sessions share this tree,
-  work on a branch and check `git status` before starting; if the tree is dirty from another
-  agent, stop and say so. The jd-intake exception below replaces the clean-tree test only for
-  an intake run that holds the shared intake lock.
+  but NEVER committed. Concurrency rule: a session that changes committed files (code, docs,
+  instructions) works in its own git worktree on its own branch, not in the shared tree
+  (Claude Code does this by default; other agents can use their worktree mode or
+  `git worktree add ../<repo>-wt/<task> -b <agent>/<task>`). A session that must write live
+  data in the shared tree first runs `node scripts/write-preflight.mjs --root . <paths>`
+  naming every path it will write, and stops only on `blocked`. Dirt elsewhere in the tree is
+  another session's and is not a reason to stop. jd-intake uses its own lock below instead.
 - **CLOUD** (a GitHub clone): the local-only dirs do not exist there. Use
   `scripts/test-data/` plus your own Notion connection for testing.
 
