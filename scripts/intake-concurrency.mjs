@@ -13,7 +13,7 @@ const EXPECTED_DIRTY = new Map([
   ["landing/_runs.md", new Set([" M", "??"])],
   ["out/mc/jobsearch-manifest.json", new Set([" M"])],
 ]);
-const PROTECTED_EXACT = new Set(["AGENTS.md", "CLAUDE.md", "PRD.md"]);
+const PROTECTED_EXACT = new Set(["AGENTS.md", "CLAUDE.md", "PRD.md", ".claude/skills/jd-intake"]);
 const PROTECTED_PREFIXES = [
   ".agents/skills/jd-intake/",
   ".claude/skills/jd-intake/",

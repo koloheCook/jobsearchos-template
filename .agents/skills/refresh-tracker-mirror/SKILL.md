@@ -1,6 +1,6 @@
 ---
 name: refresh-tracker-mirror
-description: Refresh the read-only local Master Job Tracker mirror with the deterministic refresh script.
+description: 'Refresh the read-only local Master Job Tracker mirror (data/tracker-mirror.json) with the deterministic refresh script. Use when the owner says refresh the tracker, sync from Notion, or the mirror looks stale.'
 ---
 
 # Refresh Tracker Mirror

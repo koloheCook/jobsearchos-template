@@ -1,6 +1,6 @@
 ---
 name: tailor-handoff
-description: Prepare a qualified local opportunity for the manual TAILOR-1 reference handoff to CCv2.7. Creates an append-only local packet and a copy-ready Stage 0 prompt. Never writes into CCv2.7.
+description: 'Prepare a qualified opportunity for the manual TAILOR-1 handoff to the separate tailoring project (CCv2.7). Use when the owner says hand this off for tailoring, tailor this role, or start the resume for a confirmed PURSUE. Creates an append-only local packet and a copy-ready Stage 0 prompt; never writes into the tailoring project.'
 ---
 
 # tailor-handoff
@@ -11,7 +11,7 @@ application materials. "CCv2.7" is just the reference implementation's name -- t
 companion `career-coach` template (titled CCv2.7) is one such project. The name is
 also the shared key of the handoff packet (the receiver parses the `CCv2.7 target
 folder` field), so if you keep this pairing, leave the name as-is. If you have no
-downstream tool, remove this skill (and its `.claude/skills` mirror); if you use a
+downstream tool, remove this skill (`.agents/skills/tailor-handoff` and its `.claude/skills` symlink); if you use a
 different one, adapt the skill and rename the packet field on BOTH sides so they stay
 in sync.
 
@@ -140,3 +140,14 @@ claim a CCv2.7 action without owner-provided evidence.
 Report the packet path, the exact CCv2.7 target folder, the canonical jobSearchOS folder
 path, the mode, and the manual next action. Do not print JD text or the full prompt in a
 receipt.
+
+## Claude Code only
+
+If you surface this handoff as a `spawn_task` chip so the owner can start CCv2.7 with one
+click, the chip prompt must be the copy-ready block verbatim, including the sibling-copy
+instruction with its concrete path and the empty fallback delimiters. The chip must NOT embed
+the JD body: CCv2.7 obtains the JD by copying it from the canonical jobSearchOS folder, or, if
+that path is unreachable, from an owner paste into the fallback delimiters. Never hand-assemble,
+re-summarize, reorder, drop fields from, or re-type a JD into the chip prompt. Set the chip
+`cwd` to the CCv2.7 project. (Codex has no `spawn_task`; this section applies to Claude Code
+sessions only, and Codex should skip it.)
