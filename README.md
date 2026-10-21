@@ -31,7 +31,7 @@ Then make it yours, in this order:
 
 1. **Point board-watch at your companies.** Edit `board-watch/boards.json`: one entry per company with its ATS (`greenhouse`, `ashby` or `lever`) and its board token, plus your `roleTerms` and `excludeTitle` words. See `board-watch/README.md` for how to find a token.
 2. **Calibrate the rubric** (step 6 below). Until you do, every verdict is capped at `EXPLORE`.
-3. **Open Claude Code in this folder** and run the `jd-intake` skill on whatever landed. You get one scored, gated assessment per role.
+3. **Open Claude Code in this folder** and type `/jd-intake` (every skill in this repo runs the same way: a slash and its name, or just ask for it in plain words) to triage whatever landed. You get one scored, gated assessment per role.
 4. **Run it daily** (see "Run it every morning" below).
 
 The full setup below covers the optional pieces: the Chrome capture extension, the Notion tracker mirror, the positioning playbook.
@@ -199,6 +199,18 @@ Then run `jd-intake` in Claude Code. Two ways to make that automatic:
 - **Plain cron or launchd (discovery only):** schedule the two `node` commands above; they need no AI. Run `jd-intake` yourself when you sit down.
 
 Either way, board-watch never applies, never writes to a tracker, and never sets a verdict. It only finds new links.
+
+## Clip a job posting by hand
+
+For roles board-watch can't see (custom careers sites, LinkedIn, a link a friend sent), use the Chrome extension. Load it once (setup step 5), then:
+
+1. Open the job posting and highlight the job description text with your mouse.
+2. Click the jobSearchOS extension icon in the Chrome toolbar.
+3. First time only: click **Choose web-captures folder** and pick `landing/web-captures/` inside your clone. The extension checks the folder's `README.md` marker and refuses any other folder. It remembers the choice; Chrome may ask you to re-allow access later.
+4. Optional: tick **Keep sanitized source snapshot** to also save a cleaned copy of the page.
+5. Click **Capture selected job description**. The popup confirms `Saved <id>.jd.md` and shows a preview.
+
+Then run `jd-intake` in Claude Code as usual. The extension only reads what you highlighted and cannot send anything over the network.
 
 ## Daily use
 
