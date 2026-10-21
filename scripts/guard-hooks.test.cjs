@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const { spawnSync } = require("node:child_process");
-const { mkdirSync, mkdtempSync, readFileSync, writeFileSync } = require("node:fs");
+const { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
@@ -23,6 +23,9 @@ const MIRRORED_HOOKS = [
   "scribe-check.sh",
   "verdict-gate.sh",
 ];
+
+// The Codex hook mirror is optional in this template; its tests skip when .codex/hooks is absent.
+const NO_CODEX = !existsSync(path.join(__dirname, "..", ".codex", "hooks")) && "no .codex/hooks mirror in this copy";
 
 function run(name, payload, mirror = false) {
   return spawnSync("bash", [
@@ -108,7 +111,7 @@ test("no-invented-metric separates an invented claim from an anchor citation on 
 });
 
 // The mirror contract was hand-checked; this makes a one-sided edit fail the suite.
-test("shared guard hooks are byte-identical between .claude and .codex", () => {
+test("shared guard hooks are byte-identical between .claude and .codex", { skip: NO_CODEX }, () => {
   for (const name of MIRRORED_HOOKS) {
     const claude = readFileSync(path.join(__dirname, "..", ".claude", "hooks", name));
     const codex = readFileSync(path.join(__dirname, "..", ".codex", "hooks", name));
@@ -182,7 +185,7 @@ test("grammar-lint validates _runs.md rows the same way", () => {
   assert.equal(lastHit().guard, "grammar-lint");
 });
 
-test("grammar-lint fires through the Codex mirror on a malformed ledger row", () => {
+test("grammar-lint fires through the Codex mirror on a malformed ledger row", { skip: NO_CODEX }, () => {
   const ledger = path.join(root, "landing", "_ledger.md");
   writeFileSync(ledger, LEDGER_HEADER + "| garbage | not a date | x |\n");
   const before = hitCount();
@@ -191,7 +194,7 @@ test("grammar-lint fires through the Codex mirror on a malformed ledger row", ()
   assert.equal(lastHit().guard, "grammar-lint");
 });
 
-test("verdict-gate passes a confirmed gate and blocks an unconfirmed one in the Codex mirror", () => {
+test("verdict-gate passes a confirmed gate and blocks an unconfirmed one in the Codex mirror", { skip: NO_CODEX }, () => {
   const assessment = path.join(opportunity, "assessment.md");
   const opportunityPath = "opportunities/acme_role_2026-07-15";
   writeFileSync(assessment, "## VERDICT: PURSUE\\nRole-fits-you: 8/10 | You-fit-role: 7/10 | Gate: RESOLVED-PASS\\nConfirmed: PURSUE by owner 2026-07-15\\n");

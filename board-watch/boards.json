@@ -1,0 +1,12 @@
+{
+  "boards": [
+    { "org": "gitlab",  "ats": "greenhouse", "token": "gitlab",  "enabled": true },
+    { "org": "example-ashby",  "ats": "ashby",  "token": "REPLACE_WITH_ASHBY_TOKEN",  "enabled": false },
+    { "org": "example-lever",  "ats": "lever",  "token": "REPLACE_WITH_LEVER_TOKEN",  "enabled": false }
+  ],
+  "target": {
+    "roleTerms": ["program manager", "product manager", "operations"],
+    "domainTerms": [],
+    "excludeTitle": ["intern", "engineer"]
+  }
+}

@@ -38,3 +38,7 @@ session-report-*.html
 
 # Transient mutual-exclusion state for local jd-intake runs.
 .jobsearchos-runtime/
+
+# board-watch run state and output (local to each user)
+board-watch/state/
+board-watch/out/

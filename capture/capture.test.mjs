@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { CAPTURE_DIRECTORY, CAPTURE_MARKER, formatCaptureMarkdown, parseCaptureMarkdown } from "./lib/capture-format.mjs";
 import { sanitizeAndConvert, wrapSnapshot } from "./lib/html-sanitize.mjs";
 import { writeCapture } from "./lib/capture-writer.mjs";
+import { decodeGreenhouseContent, postingFromAtsPayload, resolveAtsApi } from "./lib/ats-api.mjs";
 import { escapeHtmlLikeMarkdown } from "./chrome-extension/markdown.js";
 import { snapshotActiveSelection } from "./chrome-extension/selection.js";
 
@@ -89,6 +90,51 @@ test("writer creates a complete primary artifact and optional snapshot without t
   assert.equal(parsed.body, "# Invented Role\n\nText\n");
 });
 
+test("ats_api_content is an accepted capture method and captured_from_url may name the API endpoint", async () => {
+  const root = await fixtureRoot();
+  const result = await writeCapture(root, {
+    sourceType: "public_url",
+    captureMethod: "ats_api_content",
+    sourceUrl: "https://job-boards.greenhouse.io/invented/jobs/123",
+    capturedFromUrl: "https://boards-api.greenhouse.io/v1/boards/invented/jobs/123",
+    pageTitle: "Invented role",
+    converter: "turndown@7.2.4+jobsearchos.3",
+    body: "Invented text",
+    snapshotHtml: null,
+  });
+  const parsed = parseCaptureMarkdown(await readFile(path.join(root, "landing", result.primary), "utf8"));
+  assert.equal(parsed.frontmatter.capture_method, "ats_api_content");
+  assert.equal(parsed.frontmatter.captured_from_url, "https://boards-api.greenhouse.io/v1/boards/invented/jobs/123");
+});
+
+test("ATS API resolver maps Greenhouse job pages to the per-job endpoint and nothing else", () => {
+  assert.deepEqual(resolveAtsApi("https://job-boards.greenhouse.io/invented/jobs/123?gh_src=x"),
+    { ats: "greenhouse", apiUrl: "https://boards-api.greenhouse.io/v1/boards/invented/jobs/123" });
+  assert.deepEqual(resolveAtsApi("https://boards.greenhouse.io/invented/jobs/123"),
+    { ats: "greenhouse", apiUrl: "https://boards-api.greenhouse.io/v1/boards/invented/jobs/123" });
+  assert.equal(resolveAtsApi("https://job-boards.greenhouse.io/invented"), null);
+  assert.equal(resolveAtsApi("https://jobs.ashbyhq.com/invented/0a0a0a0a-0000-0000-0000-000000000000"), null);
+  assert.equal(resolveAtsApi("https://careers.example.invalid/jobs/123"), null);
+  assert.equal(resolveAtsApi("http://job-boards.greenhouse.io/invented/jobs/123"), null);
+});
+
+test("Greenhouse API payload is decoded from entity-escaped HTML and rejected on shape mismatch", () => {
+  const posting = postingFromAtsPayload("greenhouse", {
+    title: "Invented role",
+    content: "&lt;h2&gt;About&lt;/h2&gt;&lt;p&gt;Tom &amp; Jerry&#39;s &quot;team&quot;&lt;/p&gt;&lt;script&gt;bad()&lt;/script&gt;",
+  });
+  assert.equal(posting.title, "Invented role");
+  assert.equal(posting.html, '<h2>About</h2><p>Tom & Jerry\'s "team"</p><script>bad()</script>');
+  const converted = sanitizeAndConvert(posting.html);
+  assert.doesNotMatch(converted.sanitizedHtml, /script/i);
+  assert.match(converted.markdown, /Tom & Jerry's "team"/);
+  assert.equal(decodeGreenhouseContent("&nbsp;&lt;"), "&nbsp;<");
+  assert.throws(() => postingFromAtsPayload("greenhouse", { title: "x" }), /no content/);
+  assert.throws(() => postingFromAtsPayload("greenhouse", { content: "x" }), /no title/);
+  assert.throws(() => postingFromAtsPayload("greenhouse", null), /not an object/);
+  assert.throws(() => postingFromAtsPayload("ashby", {}), /no ATS API normalizer/);
+});
+
 test("capture parser rejects a malformed completion contract", () => {
   const id = "web-20260715T123456789Z-0123456789abcdef0123456789abcdef";
   const valid = formatCaptureMarkdown({
@@ -109,6 +155,30 @@ test("capture parser rejects a malformed completion contract", () => {
     capture_complete: true,
   }, "Invented text");
   assert.throws(() => parseCaptureMarkdown(valid.replace("<!-- capture-complete -->", "<!-- incomplete -->")), /completion marker/);
+});
+
+test("capture parser can read historical opportunity metadata without accepting a changed inbox body", () => {
+  const id = "web-20260715T123456789Z-0123456789abcdef0123456789abcdef";
+  const valid = formatCaptureMarkdown({
+    schema_version: 1,
+    artifact_type: "job_description",
+    trust_level: "untrusted_external_content",
+    source_type: "public_url",
+    capture_id: id,
+    source_url: "https://careers.example.invalid/jobs/123",
+    captured_from_url: "https://careers.example.invalid/jobs/123",
+    captured_at: "2026-07-15T12:34:56.789Z",
+    page_title: "Invented role",
+    capture_method: "jsonld_jobposting",
+    converter: "test@1",
+    content_sha256: "sha256:pending",
+    source_snapshot: null,
+    source_snapshot_sha256: null,
+    capture_complete: true,
+  }, "Original invented text");
+  const changed = valid.replace("Original invented text", "Changed invented text");
+  assert.throws(() => parseCaptureMarkdown(changed), /content hash does not match body/);
+  assert.equal(parseCaptureMarkdown(changed, { verifyContentHash: false }).frontmatter.source_url, "https://careers.example.invalid/jobs/123");
 });
 
 test("extension snapshots the top-frame selection before capture", async () => {

@@ -13,8 +13,34 @@ This is a template, not a finished tool. It ships with the scaffolding
 calibrated to nobody in particular: you fill in your own rubric, deal-breakers,
 and identity details before it makes real decisions for you.
 
+## Quickstart (about 15 minutes)
+
+You need Node.js (any recent LTS), git, and Claude Code. Nothing else is required.
+
+```sh
+git clone https://github.com/koloheCook/jobsearchos-template.git jobsearchos
+cd jobsearchos
+git config core.hooksPath scripts/hooks          # blocks career content from being committed
+node --test scripts/                             # framework self-test, expect 0 failures
+cd capture && npm ci --ignore-scripts && cd ..   # capture dependencies (2 small packages)
+node board-watch/board-watch.mjs                 # first run: records a baseline, emits nothing
+node board-watch/board-watch.mjs                 # later runs: emits only NEW on-target postings
+```
+
+Then make it yours, in this order:
+
+1. **Point board-watch at your companies.** Edit `board-watch/boards.json`: one entry per company with its ATS (`greenhouse`, `ashby` or `lever`) and its board token, plus your `roleTerms` and `excludeTitle` words. See `board-watch/README.md` for how to find a token.
+2. **Calibrate the rubric** (step 6 below). Until you do, every verdict is capped at `EXPLORE`.
+3. **Open Claude Code in this folder** and run the `jd-intake` skill on whatever landed. You get one scored, gated assessment per role.
+4. **Run it daily** (see "Run it every morning" below).
+
+The full setup below covers the optional pieces: the Chrome capture extension, the Notion tracker mirror, the positioning playbook.
+
 ## The pipeline
 
+0. **Discover** (`board-watch/`) -- polls the public job-board APIs of the companies
+   you list (Greenhouse, Ashby, Lever), diffs against yesterday, and writes only the
+   new postings that match your role terms to `board-watch/out/new-urls.txt`.
 1. **Capture** -- drop a JD PDF in `landing/`, or grab one from the web with the
    included Chrome extension or CLI (`capture/`). Everything lands in a restricted
    inbox; nothing is transformed until intake runs.
@@ -31,8 +57,7 @@ and identity details before it makes real decisions for you.
 
 A deterministic script layer (`scripts/`) keeps the ledger, the manifest, and the
 optional Notion tracker mirror consistent without relying on an LLM to get
-formatting right every time; a small set of guard hooks (`.claude/hooks/`,
-mirrored for Codex in `.codex/hooks/`) catch invented metrics, missing evidence
+formatting right every time; a small set of guard hooks (`.claude/hooks/`) catch invented metrics, missing evidence
 markers, and malformed verdict banners as you write.
 
 ## The rubric and skills model
@@ -158,6 +183,22 @@ Then wire the integration:
     find these in Notion).
 13. Run the `refresh-tracker-mirror` skill (or `node scripts/refresh-tracker-mirror.mjs`
     directly) to pull your tracker into `data/tracker-mirror.json`.
+
+## Run it every morning
+
+The daily loop is three commands: discover, capture, triage.
+
+```sh
+node board-watch/board-watch.mjs
+node capture/cli/capture-url.mjs --file board-watch/out/new-urls.txt
+```
+
+Then run `jd-intake` in Claude Code. Two ways to make that automatic:
+
+- **Claude Code desktop app (simplest):** create a scheduled task on this folder, daily at a time you like, with the prompt: "Run `node board-watch/board-watch.mjs`, then `node capture/cli/capture-url.mjs --file board-watch/out/new-urls.txt`, then run the jd-intake skill on everything new and summarize the verdicts." You read the summary with your coffee.
+- **Plain cron or launchd (discovery only):** schedule the two `node` commands above; they need no AI. Run `jd-intake` yourself when you sit down.
+
+Either way, board-watch never applies, never writes to a tracker, and never sets a verdict. It only finds new links.
 
 ## Daily use
 
