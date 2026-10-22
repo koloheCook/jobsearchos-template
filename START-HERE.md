@@ -13,7 +13,10 @@ Every morning it checks the job boards of companies you choose, saves any new po
 
 - **A Mac.** Linux should work too. On Windows, see "On Windows (untested)" below before you start.
 - **A paid Claude plan** (Pro or higher), so you can use **Claude Code**, the part of Claude that can work with files on your computer. Get the Claude desktop app from claude.ai/download and open its **Code** tab. If you use Codex instead, that works for setup too (see "Using Codex" below).
-- **About 30 minutes** for setup. Your assistant will check for and help you install the three free tools this needs (Node.js, git and jq). You do not need to know what they are.
+- **About 30 minutes** for setup, plus four free tools your assistant checks for and helps you install:
+  - **Node.js** runs jobSearchOS's own small programs, like the daily job-board check.
+  - **git** downloads the project and blocks your job data from ever being uploaded with it.
+  - **jq** and **Python** let the safety checks read what the assistant is about to write.
 
 ## How working with an AI assistant goes
 
@@ -31,7 +34,7 @@ Copy each message into Claude Code, send it, and answer its questions. Wait for 
 
 ```
 I'm new to this. Please set up jobSearchOS for me from https://github.com/koloheCook/jobsearchos-template in a new folder called jobsearchos, and work inside that folder from now on.
-First check whether Node.js, git and jq are installed on my computer. For anything missing, explain in one sentence what it is and walk me through installing it.
+First check whether Node.js, git, jq and Python 3 are installed on my computer. For anything missing, explain in one sentence what it is and walk me through installing it.
 Then run the project's setup and self-tests from its README (the Quickstart and Setup sections). Tell me in plain words whether everything passed (a few "skipped" tests are normal). Don't change the project's files yet.
 ```
 

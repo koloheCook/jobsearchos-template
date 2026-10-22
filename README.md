@@ -17,7 +17,7 @@ and identity details before it makes real decisions for you.
 
 ## Quickstart (about 15 minutes)
 
-You need Node.js (any recent LTS), git, jq (`brew install jq` on a Mac), and Claude Code.
+You need Node.js (any recent LTS), git, jq (`brew install jq` on a Mac), Python 3, and Claude Code.
 
 ```sh
 git clone https://github.com/koloheCook/jobsearchos-template.git jobsearchos
@@ -93,6 +93,7 @@ content, Notion tracker is read-only, no invented metrics, etc.).
 - **Node.js** (any recent LTS -- the scripts use only long-stable `node:` builtins,
   no build step).
 - **jq**, which the guard hooks use to read their input (`brew install jq` on a Mac).
+- **Python 3**, which two of the guard hooks use (macOS offers to install it the first time `python3` runs).
 - **Claude Code**, for the skills and guard hooks. Codex is optional and reads the same
   skills from `.agents/skills/`.
 - **Google Chrome**, only if you want the optional web-capture extension.
