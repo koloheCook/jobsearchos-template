@@ -46,14 +46,16 @@ Ask me which companies I'm interested in and which job titles I want (and any ti
 Then update board-watch/boards.json, show me what you changed in plain words, and do a test run.
 ```
 
-**3. Teach it what a good job looks like for you.** It will ask about pay, location, the kind of work you want, and deal-breakers. This takes the longest; take your time.
+**3. Teach it what a good job looks like for you, and what you bring.** It will ask about pay, location, the kind of work you want, and deal-breakers, then read your resume. This takes the longest; take your time.
 
 ```
-Walk me through filling in my job-scoring rubric in the rubric folder. Ask me one simple question at a time, in plain words, and tell me how many questions are left. Never guess an answer for me; if I'm unsure, give me two or three example answers to pick from. Also ask me where my resume is, so it can check my experience against each job.
-When we're done, save my answers, mark the rubric as calibrated with today's date, and give me a short summary.
+Walk me through filling in my job-scoring rubric: rubric/fit-rubric.md, rubric/jd-match-rubric.md and rubric/deal-breakers.md. Ask me one simple question at a time, in plain words, and tell me how many questions are left. Never guess an answer for me; if I'm unsure, give me two or three example answers to pick from.
+Then ask me where my resume is. Copy templates/career-facts.md to data/career-facts.md and fill it in from my resume, copying facts and numbers exactly as my resume states them. Show me the result so I can correct anything.
+When we're done, mark each rubric file's Status line as calibrated with today's date, and give me a short summary.
+Finally, save the rubric changes in git: commit the three rubric files in this folder with a short message. If git asks who I am, set my name and email for this folder only. Don't push anything anywhere. data/career-facts.md stays out of git on purpose.
 ```
 
-Until this step is done, every job scores EXPLORE at most, so a half-finished setup can never tell you to go after a job.
+Two things to know. Until this step is done, every job scores EXPLORE at most, so a half-finished setup can never tell you to go after a job. And jd-intake won't run while the rubric has unsaved (uncommitted) changes, so it never scores against a half-edited rubric; that's why the last line commits them. Your resume facts live in `data/`, which never goes into git.
 
 **4. Score your first job.** Pick one real job posting you're curious about and copy its link.
 
@@ -79,6 +81,7 @@ The task runs only while your computer is awake and the Claude app is open. Each
 
 - **Each morning:** open today's report in the `reports` folder (or read the summary your assistant gives you). For a PURSUE, open its assessment, decide, and apply yourself.
 - **Found a job somewhere else?** Save it with the Chrome extension (ask your assistant to set it up), or drop the PDF into the `landing` folder, then say "run jd-intake".
+- **Changed your rubric, playbook or scripts later?** Ask your assistant to commit the change. jd-intake (and the morning run) won't start while those folders have uncommitted changes, and it will tell you so.
 - **Got a call booked?** Say "run meeting-brief" and give it 2 or 3 goals for the call. After the call, say "run debrief" the same day. These are **beta**: built but not yet tested on real calls.
 
 ## On Windows (untested)
@@ -109,6 +112,7 @@ You don't need Notion; the daily report is the default way to see your pipeline.
 I keep my job tracker in Notion. Help me connect it to jobSearchOS read-only, following the "Connect Notion" section of README.md.
 Ask me what my tracker's columns are called and what status values I use, then adapt scripts/refresh-tracker-mirror.mjs to match my tracker instead of asking me to rename anything in Notion. If my Company column is plain text rather than a link to a Companies database, handle that.
 Tell me the exact file and variable names for my Notion key and IDs, and where to find each ID in Notion. I'll type the key into .env myself; never ask me for it.
+When the script works, commit the script change in this folder (don't push), so jd-intake isn't blocked by it.
 ```
 
 ## Using Codex

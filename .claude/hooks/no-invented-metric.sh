@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # PostToolUse Write|Edit guard. Warns on metric-like values without a local source.
-# jd.md + tracker-mirror.json count as sources anywhere. rubric/ comp anchors count only
+# jd.md, data/tracker-mirror.json and data/career-facts.md count as sources anywhere. rubric/ comp anchors count only
 # where the text cites one as a threshold: the anchor magnitude must match and a cue must
 # follow within 32 chars, stopping at the next metric. So "clears the $100k floor"
 # resolves while "pays $150k" still flags, even on the same line.
@@ -11,7 +11,7 @@ file=$(hook_file)
 case "$file" in */opportunities/*/assessment.md|*/opportunities/*/brief.md|*/opportunities/*/debrief.md) ;; *) exit 0 ;; esac
 [ -f "$file" ] || exit 0
 opportunity_dir=$(printf '%s' "$file" | sed -n 's#^\(.*\/opportunities\/[^/]*\)/.*$#\1#p')
-sources="$(cat "$opportunity_dir/jd.md" "$PROJECT_DIR/data/tracker-mirror.json" 2>/dev/null || true)"
+sources="$(cat "$opportunity_dir/jd.md" "$PROJECT_DIR/data/tracker-mirror.json" "$PROJECT_DIR/data/career-facts.md" 2>/dev/null || true)"
 rubric="$(cat "$PROJECT_DIR/rubric/fit-rubric.md" "$PROJECT_DIR/rubric/deal-breakers.md" 2>/dev/null || true)"
 missing="$(SOURCES="$sources" RUBRIC="$rubric" awk '
 function norm(s,   m) {

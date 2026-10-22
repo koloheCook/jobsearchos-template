@@ -55,6 +55,17 @@ function hitCount() {
   }
 }
 
+test("no-invented-metric treats data/career-facts.md as a source", () => {
+  const assessment = path.join(opportunity, "assessment.md");
+  writeFileSync(path.join(opportunity, "jd.md"), "No compensation stated.\n");
+  writeFileSync(path.join(root, "data", "career-facts.md"), "Ran a $340K vendor budget.\n");
+  const before = hitCount();
+  writeFileSync(assessment, "Evidence: ran a $340K vendor budget.\n");
+  assert.equal(run("no-invented-metric.sh", { file_path: assessment }).status, 0);
+  assert.equal(hitCount(), before, "a figure from career-facts.md must not be flagged");
+  writeFileSync(path.join(root, "data", "career-facts.md"), "");
+});
+
 test("no-invented-metric passes sourced metrics and logs unsourced metrics", () => {
   const assessment = path.join(opportunity, "assessment.md");
   writeFileSync(path.join(opportunity, "jd.md"), "Compensation is $200K.\\n");

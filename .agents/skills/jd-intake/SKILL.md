@@ -36,12 +36,15 @@ target folder already exists, report the collision and skip -- never overwrite.
    d. Write `assessment.md` per `templates/assessment.md`:
       - Role-fits-you axis: score against `rubric/fit-rubric.md` anchors only.
       - You-fit-role axis: JD must-haves vs sourced evidence only; unsourced
-        numbers become `[METRIC NEEDED]` (NO-INVENTED-METRIC). Career facts may be
-        referenced from CCv2.7 master data READ-ONLY if that project is reachable;
-        otherwise score from the JD + rubric and say so.
+        numbers become `[METRIC NEEDED]` (NO-INVENTED-METRIC). Career facts come
+        from `data/career-facts.md` (READ-ONLY; the user's own facts, made from
+        `templates/career-facts.md`). If that file is missing or empty, score
+        You-fit-role from the JD + rubric only, say so in the assessment, and tell
+        the user in the final report to create it.
       - Apply `rubric/deal-breakers.md`: each one RESOLVED-PASS / RESOLVED-FAIL /
         UNRESOLVED with the named fact or missing fact.
-      - **If any `<OWNER: ...>` placeholder in rubric/ is unfilled, the rubric is
+      - **If any `<OWNER: ...>` placeholder in rubric/ is unfilled (the backticked
+        mentions in each file's Status line are instructions, not placeholders), the rubric is
         UNCALIBRATED: cap the verdict at EXPLORE and print that on the banner.**
       - PURSUE is always "PURSUE (awaiting owner confirmation)".
    e. Append the ledger row (never edit existing rows).

@@ -15,9 +15,8 @@ never a disqualifier.
 **Evidence sources.** Only sources you name here make a fact "sourced" -- for
 example:
 
-1. Your own resume/career-data file (canonical career record, read-only from this
-   project). If you keep career data in a separate project or tool, point to it
-   here.
+1. `data/career-facts.md`: your own career facts, copied from your resume using
+   `templates/career-facts.md`. It is gitignored and read-only to jd-intake.
 2. <OWNER: any other evidence source you want to count, and the rule for when it
    counts -- e.g. research notes only once you've explicitly surfaced them into this
    project or session.>

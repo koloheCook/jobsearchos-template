@@ -28,7 +28,7 @@ career data (ASK-DONT-GUESS).
 |---|---|---|
 | Lane fit | Tier 1 | Tier 3 or unlisted (Tier 2 scores mid) |
 | Level | <OWNER: your target seniority band and what over/under-leveled looks like> | <OWNER: too junior or too senior, and how you tell> |
-| Comp | <OWNER: your comp anchor, e.g. base >= YOUR_TARGET> | Below <YOUR_COMP_FLOOR>, or undisclosed base at a thinly-funded entity |
+| Comp | <OWNER: your comp anchor, e.g. a base of at least YOUR_TARGET> | Below <YOUR_COMP_FLOOR>, or undisclosed base at a thinly-funded entity |
 | Location/remote | <OWNER: your remote/hybrid/commute tolerance> | <OWNER: your hard location exclusions and any relocation exceptions> |
 | Mission/domain pull | <OWNER: the kind of mission or domain work that energizes you> | <OWNER: the kind of work that drains you> |
 

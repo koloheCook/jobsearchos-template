@@ -122,11 +122,16 @@ content, Notion tracker is read-only, no invented metrics, etc.).
 
 ## Make it yours
 
-6. **Calibrate the rubric.** Edit `rubric/fit-rubric.md`, `rubric/deal-breakers.md`,
+6. **Calibrate the rubric, then commit it.** Edit `rubric/fit-rubric.md`, `rubric/deal-breakers.md`,
    and `rubric/jd-match-rubric.md`: fill in your own comp floor, location/commute
    constraints, target lanes, trip-wires, and mission signals. Every `<OWNER: ...>`
    placeholder is something only you can answer. Until you do, verdicts stay capped
-   at `EXPLORE`.
+   at `EXPLORE`. Commit the rubric files when done: `jd-intake` refuses to run while
+   `rubric/`, `playbook/`, `scripts/`, `templates/`, `AGENTS.md`, `CLAUDE.md` or `PRD.md`
+   have uncommitted changes, so it never scores against a half-edited rubric.
+   Then copy `templates/career-facts.md` to `data/career-facts.md` and fill it from your
+   resume; `jd-intake` uses it for the You-fit-role score (a placeholder without it), and
+   `data/` never enters git.
 7. **Backtest before you trust it.** `prompts/jobSearchOS_rubric_backtest.md` walks
    one past role at a time through your calibrated rubric and checks the verdict
    against your own gut; `prompts/backtest_synthesis.md` rolls the results up and
