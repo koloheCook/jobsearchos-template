@@ -25,7 +25,7 @@ function norm(s,   m) {
 }
 BEGIN {
   TOKEN = "\\$[0-9][0-9,.]*[KMB]?|[0-9][0-9,.]*%|[0-9][0-9,.]*[KMB]"
-  CUE = "floor|anchor|threshold|deal-breaker|dealbreaker|rubric|minimum"
+  CUE = "floor|anchor|threshold|deal-breaker|dealbreaker|rubric|minimum|below|above|at least|base"
   rest = ENVIRON["RUBRIC"]
   while (match(rest, /\$[0-9][0-9,.]*[kKmMbB]?/)) {
     anchor[norm(substr(rest, RSTART, RLENGTH))] = 1
@@ -39,6 +39,8 @@ BEGIN {
     token = substr(rest, RSTART, RLENGTH)
     before = done substr(rest, 1, RSTART - 1)
     after = substr(rest, RSTART + RLENGTH)
+    # Sentence punctuation is not part of the number: "$176,400," is "$176,400".
+    while (token ~ /[,.]$/) { after = substr(token, length(token)) after; token = substr(token, 1, length(token) - 1) }
     done = before token
     rest = after
     if (token ~ /^(19[0-9][0-9]|20[0-9][0-9])$/) continue

@@ -68,6 +68,15 @@ test("no-invented-metric accepts a rubric anchor when the cue comes before it", 
   assert.doesNotMatch(lastHit().detail, /\$100/);
 });
 
+test("no-invented-metric ignores sentence punctuation after a sourced figure", () => {
+  const assessment = path.join(opportunity, "assessment.md");
+  writeFileSync(path.join(opportunity, "jd.md"), "The range is $104,800 to $176,400 USD.\n");
+  const before = hitCount();
+  writeFileSync(assessment, "Posted range ($104,800 to $176,400, per the JD) straddles the floor.\n");
+  assert.equal(run("no-invented-metric.sh", { file_path: assessment }).status, 0);
+  assert.equal(hitCount(), before, "a trailing comma must not turn a sourced figure into an unsourced one");
+});
+
 test("no-invented-metric treats data/career-facts.md as a source", () => {
   const assessment = path.join(opportunity, "assessment.md");
   writeFileSync(path.join(opportunity, "jd.md"), "No compensation stated.\n");
