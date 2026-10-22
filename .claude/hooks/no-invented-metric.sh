@@ -2,8 +2,9 @@
 # PostToolUse Write|Edit guard. Warns on metric-like values without a local source.
 # jd.md, data/tracker-mirror.json and data/career-facts.md count as sources anywhere. rubric/ comp anchors count only
 # where the text cites one as a threshold: the anchor magnitude must match and a cue must
-# follow within 32 chars, stopping at the next metric. So "clears the $100k floor"
-# resolves while "pays $150k" still flags, even on the same line.
+# sit within 32 chars on either side, stopping at the nearest other metric. So "clears the
+# $100k floor" and "comp floor ($100k)" resolve while "pays $150k" still flags, even on the
+# same line.
 set -u
 . "$(dirname "$0")/_common.sh"
 
@@ -33,17 +34,22 @@ BEGIN {
 }
 {
   rest = $0
+  done = ""
   while (match(rest, TOKEN)) {
     token = substr(rest, RSTART, RLENGTH)
+    before = done substr(rest, 1, RSTART - 1)
     after = substr(rest, RSTART + RLENGTH)
+    done = before token
     rest = after
     if (token ~ /^(19[0-9][0-9]|20[0-9][0-9])$/) continue
     if (index(ENVIRON["SOURCES"], token)) continue
     window = substr(after, 1, 32)
     if (match(window, TOKEN)) window = substr(window, 1, RSTART - 1)
+    lead = substr(before, length(before) > 32 ? length(before) - 31 : 1)
+    while (match(lead, TOKEN)) lead = substr(lead, RSTART + RLENGTH)
     written = token
     if (substr(after, 1, 1) ~ /[kKmMbB]/) written = token substr(after, 1, 1)
-    if (norm(written) in anchor && window ~ CUE) continue
+    if (norm(written) in anchor && (window ~ CUE || lead ~ CUE)) continue
     if (!(token in seen)) { seen[token] = 1; out = out (out ? ", " : "") token }
   }
 }

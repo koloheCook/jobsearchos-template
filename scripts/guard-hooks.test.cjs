@@ -55,6 +55,19 @@ function hitCount() {
   }
 }
 
+test("no-invented-metric accepts a rubric anchor when the cue comes before it", () => {
+  const assessment = path.join(opportunity, "assessment.md");
+  writeFileSync(path.join(opportunity, "jd.md"), "No compensation stated.\n");
+  const before = hitCount();
+  writeFileSync(assessment, "Gate: comp floor ($100k) is not guaranteed by this range.\n");
+  assert.equal(run("no-invented-metric.sh", { file_path: assessment }).status, 0);
+  assert.equal(hitCount(), before, "a cue before the anchor must resolve it");
+  writeFileSync(assessment, "Comp floor ($100k) noted; the role pays $150k.\n");
+  assert.equal(run("no-invented-metric.sh", { file_path: assessment }).status, 0);
+  assert.match(lastHit().detail, /\$150/);
+  assert.doesNotMatch(lastHit().detail, /\$100/);
+});
+
 test("no-invented-metric treats data/career-facts.md as a source", () => {
   const assessment = path.join(opportunity, "assessment.md");
   writeFileSync(path.join(opportunity, "jd.md"), "No compensation stated.\n");

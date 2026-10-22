@@ -45,4 +45,5 @@ still open, pointers to the gaps below>
 
 ## Next 3 moves
 1. <specific, dated where possible; if verdict is PURSUE: "owner confirms verdict,
-   then CCv2.7 tailoring session">
+   then applies" (name a tailoring session only if a tailoring project is set up;
+   see jd-intake step 4)>

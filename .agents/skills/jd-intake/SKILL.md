@@ -55,7 +55,13 @@ target folder already exists, report the collision and skip -- never overwrite.
 4. Final report table: JD | folder | verdict | gate status | next manual step. End
    with: which assessments the owner should read first (PURSUE and gated EXPLORE
    before PASS). For a role that clears the TAILOR-1 standard gate, name
-   `tailor-handoff` as the next manual step. Never direct the owner to `/jd-analysis`
+   `tailor-handoff` as the next manual step ONLY when a tailoring project is set up:
+   the `tailor-handoff` skill exists AND its downstream project folder exists as a
+   sibling of this repository (`../CCv2.7/` unless the user renamed it; see that
+   skill's portability note). Otherwise the next step is plain: "Read the
+   assessment, confirm it if you agree, then apply yourself; tailor your resume and
+   cover letter your own way (jobSearchOS stops at triage)." Write the same rule into
+   the assessment's "Next 3 moves". Never direct the owner to `/jd-analysis`
    from jobSearchOS and never create a CCv2.7 folder.
 
 ## Bounds
